@@ -2,7 +2,6 @@
 
 namespace Emagister\Collections\Tests;
 
-use Emagister\Collections\Collection;
 use Emagister\Collections\Map;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
@@ -172,5 +171,32 @@ class MapTest extends BaseTestCase
         }
 
         $this->assertEquals(['one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5], $iteratedElements);
+    }
+
+    /** @test */
+    public function it_should_keep_keys_when_cloning_a_map(): void
+    {
+        $stringIndexedMap = new Map([
+            'one' => 1,
+            'two' => 2,
+            'three' => 3,
+            'four' => 4,
+            'five' => 5
+        ]);
+
+        $clonedStringIndexedMap = $stringIndexedMap->clone();
+
+        $this->assertInstanceOf(Map::class, $clonedStringIndexedMap);
+        $this->assertEquals($stringIndexedMap->toArray(), $clonedStringIndexedMap->toArray());
+
+        $integerIndexedMap = new Map([
+            5 => 'five',
+            2 => 'two',
+            4 => 'four'
+        ]);
+
+        $clonedIntegerIndexedMap = $integerIndexedMap->clone();
+
+        $this->assertEquals($integerIndexedMap->toArray(), $clonedIntegerIndexedMap->toArray());
     }
 }

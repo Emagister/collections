@@ -17,6 +17,11 @@ abstract class Sequence implements JsonSerializable, Iterator, Countable
         $this->elements = $elements;
     }
 
+    public function __clone(): void
+    {
+        $this->elements = $this->clone()->elements;
+    }
+
     protected function createSequence(array $elements): Sequence
     {
         return new static($elements);
@@ -270,7 +275,9 @@ abstract class Sequence implements JsonSerializable, Iterator, Countable
 
     final public function clone(): Sequence
     {
-        return clone $this;
+        $clonedElements = array_map(fn ($element) => is_object($element) ? clone $element : $element, $this->elements);
+
+        return $this->createSequence($clonedElements);
     }
 
     final public function groupBy(Closure $discriminatorCallback): HMap

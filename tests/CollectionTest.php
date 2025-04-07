@@ -4,6 +4,7 @@ namespace Emagister\Collections\Tests;
 
 use Emagister\Collections\Collection;
 use PHPUnit\Framework\TestCase as BaseTestCase;
+use stdClass;
 
 class CollectionTest extends BaseTestCase
 {
@@ -118,5 +119,53 @@ class CollectionTest extends BaseTestCase
         }
 
         $this->assertEquals([1, 2, 3, 4, 5], $iteratedElements);
+    }
+
+    /** @test */
+    public function it_should_perform_a_deep_clone_when_cloning_the_collection(): void
+    {
+        $element1 = new stdClass();
+        $element1->value = 'element 1 original value';
+
+        $element2 = new stdClass();
+        $element2->value = 'element 2 original value';
+
+        $collection = new Collection([$element1, $element2]);
+
+        $clonedCollection = $collection->clone();
+        $clonedElement1 = $clonedCollection->head();
+        $clonedElement2 = $clonedCollection->last();
+
+        $clonedElement1->value = 'cloned element 1 new value';
+        $clonedElement2->value = 'cloned element 2 new value';
+
+        $this->assertEquals('element 1 original value', $element1->value);
+        $this->assertEquals('element 2 original value', $element2->value);
+        $this->assertEquals('cloned element 1 new value', $clonedElement1->value);
+        $this->assertEquals('cloned element 2 new value', $clonedElement2->value);
+
+        $collectionCollection = new Collection([$collection]);
+        $clonedCollectionCollection = $collectionCollection->clone();
+
+        $clonedElement1 = $clonedCollectionCollection->head()->head();
+        $clonedElement2 = $clonedCollectionCollection->head()->last();
+
+        $clonedElement1->value = 'cloned element 1 new value';
+        $clonedElement2->value = 'cloned element 2 new value';
+
+        $this->assertEquals('element 1 original value', $element1->value);
+        $this->assertEquals('element 2 original value', $element2->value);
+        $this->assertEquals('cloned element 1 new value', $clonedElement1->value);
+        $this->assertEquals('cloned element 2 new value', $clonedElement2->value);
+    }
+
+    /** @test */
+    public function it_should_clone_a_non_object_collection_successfully(): void
+    {
+        $collection = new Collection([1, 2, 3, 4, 5]);
+        $clonedCollection = $collection->clone();
+
+        $this->assertInstanceOf(Collection::class, $clonedCollection);
+        $this->assertEquals($collection->toArray(), $clonedCollection->toArray());
     }
 }
