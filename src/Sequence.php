@@ -270,7 +270,7 @@ abstract class Sequence implements JsonSerializable, Iterator, Countable
 
     final public function clone(): Sequence
     {
-        $clonedElements = array_map(fn ($element) => clone $element, $this->elements);
+        $clonedElements = array_map(fn ($element) => is_object($element) ? clone $element : $element, $this->elements);
 
         return $this->createSequence($clonedElements);
     }

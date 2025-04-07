@@ -144,4 +144,14 @@ class CollectionTest extends BaseTestCase
         $this->assertEquals('cloned element 1 new value', $clonedElement1->value);
         $this->assertEquals('cloned element 2 new value', $clonedElement2->value);
     }
+
+    /** @test */
+    public function it_should_clone_a_non_object_collection_successfully(): void
+    {
+        $collection = new Collection([1, 2, 3, 4, 5]);
+        $clonedCollection = $collection->clone();
+
+        $this->assertInstanceOf(Collection::class, $clonedCollection);
+        $this->assertEquals($collection->toArray(), $clonedCollection->toArray());
+    }
 }
