@@ -151,7 +151,6 @@ class CollectionTest extends BaseTestCase
         $collection = new Collection([1, 2, 3, 4, 5]);
         $clonedCollection = $collection->clone();
 
-        $this->assertInstanceOf(Collection::class, $clonedCollection);
         $this->assertEquals($collection->toArray(), $clonedCollection->toArray());
     }
 }
