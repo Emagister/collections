@@ -17,6 +17,11 @@ abstract class Sequence implements JsonSerializable, Iterator, Countable
         $this->elements = $elements;
     }
 
+    public function __clone(): void
+    {
+        $this->elements = $this->clone()->elements;
+    }
+
     protected function createSequence(array $elements): Sequence
     {
         return new static($elements);

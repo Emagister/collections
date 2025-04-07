@@ -143,6 +143,20 @@ class CollectionTest extends BaseTestCase
         $this->assertEquals('element 2 original value', $element2->value);
         $this->assertEquals('cloned element 1 new value', $clonedElement1->value);
         $this->assertEquals('cloned element 2 new value', $clonedElement2->value);
+
+        $collectionCollection = new Collection([$collection]);
+        $clonedCollectionCollection = $collectionCollection->clone();
+
+        $clonedElement1 = $clonedCollectionCollection->head()->head();
+        $clonedElement2 = $clonedCollectionCollection->head()->last();
+
+        $clonedElement1->value = 'cloned element 1 new value';
+        $clonedElement2->value = 'cloned element 2 new value';
+
+        $this->assertEquals('element 1 original value', $element1->value);
+        $this->assertEquals('element 2 original value', $element2->value);
+        $this->assertEquals('cloned element 1 new value', $clonedElement1->value);
+        $this->assertEquals('cloned element 2 new value', $clonedElement2->value);
     }
 
     /** @test */
