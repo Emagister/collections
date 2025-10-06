@@ -1,0 +1,84 @@
+name: Automatic Release Tagging & composer.json Update
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  tag_release:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Generate App Token for Elevated Access
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+          repository: ${{ github.repository }}
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.generate_token.outputs.token }}
+
+      - name: Determine Version Increment Type
+        id: determine
+        run: |
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          INCREMENT_TYPE="patch"
+
+          case "$BRANCH_NAME" in
+              new-version-*) INCREMENT_TYPE="major" ;;
+              feature-*|improvement-*) INCREMENT_TYPE="minor" ;;
+              bugfix-*) INCREMENT_TYPE="patch" ;;
+              *) INCREMENT_TYPE="patch" ;;
+          esac
+          
+          echo "VERSION_INCREMENT=$INCREMENT_TYPE" >> $GITHUB_ENV
+
+      - name: Calculate Next Version
+        id: create_tag
+        env:
+          INCREMENT: ${{ env.VERSION_INCREMENT }}
+        run: |
+          source "${GITHUB_WORKSPACE}/etc/git/scripts/bump-version.sh"
+          
+          NEW_VERSION=$(calculate_next_version "$INCREMENT")
+
+          echo "NEW_VERSION_NUMBER=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Update composer.json and commit
+        id: update_composer
+        env:
+          NEW_VERSION: ${{ steps.create_tag.outputs.NEW_VERSION_NUMBER }}
+        run: |
+          jq --indent 4 --arg newVersion "$NEW_VERSION" '.version = $newVersion' composer.json > composer.json.tmp
+          mv composer.json.tmp composer.json
+          
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+
+          git config user.name 'GitHub Actions'
+          git config user.email 'actions@github.com'
+          
+          git add composer.json
+          git commit -m "chore(release): Bump version to ${{ env.NEW_VERSION }} [skip ci]"
+
+      - name: Tag and Push release
+        env:
+          ELEVATED_TOKEN: ${{ steps.generate_token.outputs.token }}
+          NEW_VERSION: ${{ steps.create_tag.outputs.NEW_VERSION_NUMBER }}
+        run: |
+          git tag -a "v$NEW_VERSION" -m "Release v$NEW_VERSION"
+
+          git push "https://x-access-token:$ELEVATED_TOKEN@github.com/${{ github.repository }}.git" "v$NEW_VERSION"
+          git push "https://x-access-token:$ELEVATED_TOKEN@github.com/${{ github.repository }}.git" main
