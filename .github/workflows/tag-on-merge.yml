@@ -20,7 +20,6 @@ jobs:
         with:
           app-id: ${{ secrets.BOT_APP_ID }}
           private-key: ${{ secrets.BOT_PRIVATE_KEY }}
-          repository: ${{ github.repository }}
 
       - name: Checkout Code
         uses: actions/checkout@v4
