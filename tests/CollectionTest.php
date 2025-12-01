@@ -105,6 +105,23 @@ class CollectionTest extends BaseTestCase
     }
 
     /** @test */
+    public function partition_method_should_not_lose_data_for_elements_with_different_types(): void
+    {
+        $collection = new Collection([1, '1']);
+
+        $partitioned = $collection->partition(fn($x) => is_int($x));
+
+        $intCollection = $partitioned->head();
+        $noIntCollection = $partitioned->last();
+
+        $this->assertEquals(1, $intCollection->count(), 'Integer collection should have 1 element.');
+        $this->assertEquals(1, $noIntCollection->count(), 'No-integer collection should have 1 element.');
+
+        $this->assertTrue($intCollection->contains(1), 'Integer collection should contain integer value');
+        $this->assertTrue($noIntCollection->contains('1'), 'No-integer collection should contain string value');
+    }
+
+    /** @test */
     public function it_should_calculate_the_difference_of_two_collections()
     {
         $numbers = new Collection([1, 3, 4, 5, 6, 7, 8]);
@@ -113,6 +130,17 @@ class CollectionTest extends BaseTestCase
         $diff = $numbers->diff($evenNumbers);
 
         $this->assertEquals([1, 3, 5, 7], $diff->toArray());
+    }
+
+    /** @test */
+    public function it_should_calculate_the_difference_of_two_collections_with_different_types()
+    {
+        $numbers = new Collection([1, 3, 4, 5, 6, 7, 8]);
+        $evenNumbers = new Collection(['2', 4, '6', 8, '10']);
+
+        $diff = $numbers->diff($evenNumbers);
+
+        $this->assertEquals([1, 3, 5, 6, 7], $diff->toArray());
     }
 
     /** @test */
@@ -140,6 +168,7 @@ class CollectionTest extends BaseTestCase
 
         $this->assertEquals([1, 2, 3, 4, 5], $iteratedElements);
     }
+
 
     /** @test */
     public function it_should_perform_a_deep_clone_when_cloning_the_collection(): void
@@ -178,7 +207,6 @@ class CollectionTest extends BaseTestCase
         $this->assertEquals('cloned element 1 new value', $clonedElement1->value);
         $this->assertEquals('cloned element 2 new value', $clonedElement2->value);
     }
-
 
     /** @test */
     public function it_should_clone_a_non_object_collection_successfully(): void
