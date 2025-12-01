@@ -69,6 +69,26 @@ class CollectionTest extends BaseTestCase
     }
 
     /** @test */
+    public function join_method_should_not_lose_data(): void
+    {
+        $collection = new Collection(['a', 'b', 'c']);
+        $otherCollection = new Collection(['d', 'e', 'f']);
+
+        $joinedCollection = $collection->join($otherCollection);
+
+        $this->assertEquals(
+            6,
+            $joinedCollection->count(),
+            sprintf('Joined collection should have 6 elements and has %s elements.', $joinedCollection->count())
+        );
+        $this->assertSame(
+            ['a', 'b', 'c', 'd', 'e', 'f'],
+            $joinedCollection->toArray(),
+            'Joined collection elements should match the original collections.'
+        );
+    }
+
+    /** @test */
     public function it_should_part_a_collection()
     {
         $numbers = new Collection([1, 2, 3, 4, 5, 6]);
@@ -158,6 +178,7 @@ class CollectionTest extends BaseTestCase
         $this->assertEquals('cloned element 1 new value', $clonedElement1->value);
         $this->assertEquals('cloned element 2 new value', $clonedElement2->value);
     }
+
 
     /** @test */
     public function it_should_clone_a_non_object_collection_successfully(): void
