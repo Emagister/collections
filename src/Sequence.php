@@ -105,14 +105,13 @@ abstract class Sequence implements JsonSerializable, Iterator, Countable
         );
     }
 
-    /** @throws CollectionException */
     final public function equals(Sequence $sequence): bool
     {
         if ($sequence->count() != $this->count()) {
             return false;
         }
 
-        return $this->diff($sequence)->isEmpty();
+        return $sequence->toArray() === $this->toArray();
     }
 
     /** @throws CollectionException */

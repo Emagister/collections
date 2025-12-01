@@ -217,4 +217,28 @@ class CollectionTest extends BaseTestCase
         $this->assertInstanceOf(Collection::class, $clonedCollection);
         $this->assertEquals($collection->toArray(), $clonedCollection->toArray());
     }
+
+    /** @test */
+    public function equals_method_should_not_return_false_positive_for_collections_with_same_elements_in_different_order(): void
+    {
+        $collection1 = new Collection([1, 2]);
+        $collection2 = new Collection([2, 1]);
+
+        $this->assertFalse(
+            $collection1->equals($collection2),
+            'Collections with same elements in different order should not be equal.'
+        );
+    }
+
+    /** @test */
+    public function equals_method_should_not_return_false_positive_for_equals_collections_with_different_element_types(): void
+    {
+        $collection1 = new Collection([1, 2]);
+        $collection2 = new Collection(['1', '2']);
+
+        $this->assertFalse(
+            $collection1->equals($collection2),
+            'Collections with elements of different types should not be equal.'
+        );
+    }
 }

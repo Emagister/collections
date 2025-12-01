@@ -199,4 +199,29 @@ class MapTest extends BaseTestCase
 
         $this->assertEquals($integerIndexedMap->toArray(), $clonedIntegerIndexedMap->toArray());
     }
+
+
+    /** @test */
+    public function equals_method_should_not_return_false_positive_for_maps_with_same_elements_in_different_order(): void
+    {
+        $map1 = new Map(['1' => 1, '2' => 2]);
+        $map2 = new Map(['2' => 2, '1' => 1]);
+
+        $this->assertFalse(
+            $map1->equals($map2),
+            'Collections with same elements in different order should not be equal.'
+        );
+    }
+
+    /** @test */
+    public function equals_method_should_not_return_false_positive_for_equals_maps_with_different_element_types(): void
+    {
+        $map1 = new Map(['1' => 1, '2' => 2]);
+        $map2 = new Map(['1'=> '1', '2' => '2']);
+
+        $this->assertFalse(
+            $map1->equals($map2),
+            'Collections with elements of different types should not be equal.'
+        );
+    }
 }
