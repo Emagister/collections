@@ -231,7 +231,7 @@ class CollectionTest extends BaseTestCase
     }
 
     /** @test */
-    public function equals_method_should_not_return_false_positive_for_equals_collections_with_different_element_types(): void
+    public function equals_method_should_not_return_false_positive_for_collections_with_different_element_types(): void
     {
         $collection1 = new Collection([1, 2]);
         $collection2 = new Collection(['1', '2']);
