@@ -93,7 +93,7 @@ abstract class Sequence implements JsonSerializable, Iterator, Countable
 
     final public function contains($element): bool
     {
-        return array_search($element, $this->elements) !== false;
+        return in_array($element, $this->elements, true);
     }
 
     final public function containsWithClosure($element, Closure $callback): bool
@@ -105,14 +105,13 @@ abstract class Sequence implements JsonSerializable, Iterator, Countable
         );
     }
 
-    /** @throws CollectionException */
     final public function equals(Sequence $sequence): bool
     {
         if ($sequence->count() != $this->count()) {
             return false;
         }
 
-        return $this->diff($sequence)->isEmpty();
+        return $sequence->toArray() === $this->toArray();
     }
 
     /** @throws CollectionException */
@@ -275,7 +274,7 @@ abstract class Sequence implements JsonSerializable, Iterator, Countable
 
     final public function clone(): Sequence
     {
-        $clonedElements = array_map(fn ($element) => is_object($element) ? clone $element : $element, $this->elements);
+        $clonedElements = array_map(fn($element) => is_object($element) ? clone $element : $element, $this->elements);
 
         return $this->createSequence($clonedElements);
     }
