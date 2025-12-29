@@ -7,10 +7,15 @@ use Emagister\Collections\CollectionException;
 use Emagister\Collections\HomogeneityChecker;
 use Emagister\Collections\Sequence;
 
+/**
+ * @template TValue
+ * @extends Collection<TValue>
+ */
 class HCollection extends Collection
 {
     private HomogeneityChecker $homogeneityChecker;
 
+    /** @var class-string<TValue> */
     private string $type;
 
     /** @throws CollectionException */
@@ -24,7 +29,10 @@ class HCollection extends Collection
         parent::__construct($elements);
     }
 
-    /** @throws CollectionException */
+    /**
+     * @param TValue $element
+     * @throws CollectionException
+     */
     public function add($element): void
     {
         $this->homogeneityChecker->checkElement($element);
@@ -37,7 +45,11 @@ class HCollection extends Collection
         return $this->type;
     }
 
-    /** @throws CollectionException */
+    /**
+     * @param array<int, TValue> $elements
+     * @return HCollection<TValue>
+     * @throws CollectionException
+     */
     protected function createSequence(array $elements): HCollection
     {
         return new static($this->type, $elements);

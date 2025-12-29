@@ -5,6 +5,7 @@ namespace Emagister\Collections\Collection;
 use Emagister\Collections\HomogeneityChecker;
 use Stringable;
 
+/** @extends HCollection<numeric> */
 final class NumericCollection extends HCollection implements Stringable
 {
     public function __construct(array $elements = [])

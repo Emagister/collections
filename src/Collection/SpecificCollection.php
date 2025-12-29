@@ -5,8 +5,13 @@ namespace Emagister\Collections\Collection;
 use Emagister\Collections\Collection;
 use InvalidArgumentException;
 
+/**
+ * @template TValue
+ * @extends Collection<TValue>
+ */
 abstract class SpecificCollection extends Collection
 {
+    /** @var class-string<TValue> */
     protected string $classType;
 
     public function __construct(array $elements = [])
