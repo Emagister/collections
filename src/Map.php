@@ -111,7 +111,7 @@ class Map extends Sequence
     /** @return array<string> */
     final public function keys(): array
     {
-        return array_map(fn($key) => (string)$key, array_keys($this->elements));
+        return array_map(fn($key) => (string) $key, array_keys($this->elements));
     }
 
     final public function usort(callable $callback): Map
