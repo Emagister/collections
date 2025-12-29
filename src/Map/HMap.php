@@ -16,6 +16,7 @@ class HMap extends Map
 {
     private HomogeneityChecker $homogeneityChecker;
 
+    /** @var class-string<TValue> */
     private string $type;
 
     /** @throws CollectionException */

@@ -15,6 +15,7 @@ class HCollection extends Collection
 {
     private HomogeneityChecker $homogeneityChecker;
 
+    /** @var class-string<TValue> */
     private string $type;
 
     /** @throws CollectionException */
