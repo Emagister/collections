@@ -1,6 +1,6 @@
 <?php
 
-namespace Emagister\Collections\Tests;
+namespace Emagister\Collections\Tests\Collection;
 
 use Emagister\Collections\Collection\HCollection;
 use Emagister\Collections\HomogeneityChecker;

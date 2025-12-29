@@ -4,6 +4,7 @@ namespace Emagister\Collections\Collection;
 
 use Emagister\Collections\HomogeneityChecker;
 
+/** @extends HCollection<int, bool> */
 final class BooleanCollection extends HCollection
 {
     public function __construct(array $elements = [])

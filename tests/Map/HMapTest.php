@@ -1,6 +1,6 @@
 <?php
 
-namespace Emagister\Collections\Tests;
+namespace Emagister\Collections\Tests\Map;
 
 use Emagister\Collections\HomogeneityChecker;
 use Emagister\Collections\Map\HMap;

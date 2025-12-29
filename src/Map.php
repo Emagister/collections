@@ -4,10 +4,12 @@ namespace Emagister\Collections;
 
 use Closure;
 
+/**
+ * @template TValue
+ * @extends Sequence<string, TValue>
+ */
 class Map extends Sequence
 {
-    private int|string|null $currentKey;
-
     public function __construct(array $elements = [], Closure $elementKeyClosure = null)
     {
         if (!is_null($elementKeyClosure)) {
@@ -15,10 +17,14 @@ class Map extends Sequence
         }
 
         parent::__construct($elements);
-
-        $this->currentKey = key($elements);
     }
 
+    /**
+     * @param array   $elements
+     * @param Closure $elementKeyClosure
+     *
+     * @return array<string, TValue>
+     */
     private function indexElementsUsingClosure(array $elements, Closure $elementKeyClosure): array
     {
         $keys = array_map(
@@ -31,11 +37,19 @@ class Map extends Sequence
         return array_combine($keys, $elements);
     }
 
+    /**
+     * @param string $key
+     * @param TValue $value
+     */
     public function add(string $key, $value): void
     {
         $this->elements[$key] = $value;
     }
 
+    /**
+     * @param string $key
+     * @param TValue $value
+     */
     public function prepend(string $key, $value): void
     {
         $currentElements = $this->elements;
@@ -94,49 +108,10 @@ class Map extends Sequence
         return true;
     }
 
-    final public function current(): mixed
-    {
-        return current($this->elements);
-    }
-
-    final public function next(): void
-    {
-        if ($this->currentKey !== $this->key()) {
-            $this->updateCurrentKey();
-            return;
-        }
-
-        next($this->elements);
-
-        $this->updateCurrentKey();
-    }
-
-    final public function key(): ?string
-    {
-        return key($this->elements);
-    }
-
-    final public function valid(): bool
-    {
-        $key = key($this->elements);
-
-        return !is_null($key) && $key !== false;
-    }
-
-    final public function rewind(): void
-    {
-        reset($this->elements);
-        $this->updateCurrentKey();
-    }
-
-    private function updateCurrentKey(): void
-    {
-        $this->currentKey = $this->key();
-    }
-
+    /** @return array<string> */
     final public function keys(): array
     {
-        return array_map(fn($key) => (string) $key, array_keys($this->elements));
+        return array_map(fn($key) => (string)$key, array_keys($this->elements));
     }
 
     final public function usort(callable $callback): Map

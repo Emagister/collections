@@ -4,6 +4,7 @@ namespace Emagister\Collections\Map;
 
 use Emagister\Collections\HomogeneityChecker;
 
+/** @extends HMap<string, numeric> */
 final class NumericMap extends HMap
 {
     public function __construct(array $elements = [])

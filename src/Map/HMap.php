@@ -8,6 +8,10 @@ use Emagister\Collections\HomogeneityChecker;
 use Emagister\Collections\Map;
 use Emagister\Collections\Sequence;
 
+/**
+ * @template TValue
+ * @extends Map<TValue>
+ */
 class HMap extends Map
 {
     private HomogeneityChecker $homogeneityChecker;
@@ -25,7 +29,10 @@ class HMap extends Map
         parent::__construct($elements, $elementKeyClosure);
     }
 
-    /** @throws CollectionException */
+    /**
+     * @param TValue $value
+     * @throws CollectionException
+     */
     public function add(string $key, $value): void
     {
         $this->homogeneityChecker->checkElement($value);
@@ -39,6 +46,8 @@ class HMap extends Map
     }
 
     /**
+     * @param array<string, TValue> $elements
+     * @return HMap<TValue>
      * @throws CollectionException
      */
     protected function createSequence(array $elements): HMap
