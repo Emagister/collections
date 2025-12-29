@@ -22,6 +22,8 @@ final class ConcreteObjectMapTest extends BaseTestCase
 
         foreach ($map as $object) {
             $this->assertInstanceOf(ConcreteObject::class, $object);
+            $this->assertObjectHasProperty('id', $object);
+            $this->assertObjectHasProperty('name', $object);
         }
     }
 }

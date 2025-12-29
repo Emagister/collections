@@ -6,9 +6,7 @@ use Closure;
 use Emagister\Collections\Map\HMap;
 use Emagister\Collections\Tests\ConcreteObject;
 
-/**
- * @extends HMap<ConcreteObject>
- */
+/** @extends HMap<ConcreteObject> */
 final class ConcreteObjectMap extends HMap
 {
     public function __construct(array $elements = [], Closure $elementKeyClosure = null)

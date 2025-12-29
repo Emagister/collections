@@ -4,14 +4,13 @@ namespace Emagister\Collections\Tests\Collection;
 
 use Emagister\Collections\CollectionException;
 use Emagister\Collections\Tests\ConcreteObject;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 final class ConcreteObjectCollectionTest extends BaseTestCase
 {
-    /**
-     * @test
-     * @throws CollectionException
-     */
+    /** @throws CollectionException */
+    #[Test]
     public function it_should_infer_collection_element_object_type_with_phpdoc(): void
     {
         $collection = new ConcreteObjectCollection([
@@ -20,6 +19,8 @@ final class ConcreteObjectCollectionTest extends BaseTestCase
 
         foreach ($collection as $object) {
             $this->assertInstanceOf(ConcreteObject::class, $object);
+            $this->assertObjectHasProperty('id', $object);
+            $this->assertObjectHasProperty('name', $object);
         }
     }
 }
