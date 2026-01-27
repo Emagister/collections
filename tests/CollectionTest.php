@@ -89,7 +89,10 @@ class CollectionTest extends BaseTestCase
         );
     }
 
-    /** @test */
+    /**
+     * @test
+     * @throws CollectionException
+     */
     public function it_should_part_a_collection()
     {
         $numbers = new Collection([1, 2, 3, 4, 5, 6]);
@@ -105,7 +108,10 @@ class CollectionTest extends BaseTestCase
         $this->assertEquals([1, 3, 5], $partition->last()->toArray());
     }
 
-    /** @test */
+    /**
+     * @test
+     * @throws CollectionException
+     */
     public function partition_method_should_not_lose_data_for_elements_with_different_types(): void
     {
         $collection = new Collection([1, '1']);
@@ -122,7 +128,10 @@ class CollectionTest extends BaseTestCase
         $this->assertTrue($noIntCollection->contains('1'), 'No-integer collection should contain string value');
     }
 
-    /** @test */
+    /**
+     * @test
+     * @throws CollectionException
+     */
     public function it_should_calculate_the_difference_of_two_collections()
     {
         $numbers = new Collection([1, 3, 4, 5, 6, 7, 8]);
@@ -133,8 +142,11 @@ class CollectionTest extends BaseTestCase
         $this->assertEquals([1, 3, 5, 7], $diff->toArray());
     }
 
-    /** @test */
-    public function it_should_calculate_the_difference_of_two_collections_with_different_types()
+    /**
+     * @test
+     * @throws CollectionException
+     */
+    public function diff_method_should_work_properly_with_elements_with_different_types()
     {
         $numbers = new Collection([1, 3, 4, 5, 6, 7, 8]);
         $evenNumbers = new Collection(['2', 4, '6', 8, '10']);
