@@ -2,6 +2,7 @@
 
 namespace Emagister\Collections\Tests;
 
+use Emagister\Collections\CollectionException;
 use Emagister\Collections\Map;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
@@ -201,19 +202,25 @@ class MapTest extends BaseTestCase
     }
 
 
-    /** @test */
-    public function equals_method_should_not_return_false_positive_for_maps_with_same_elements_in_different_order(): void
+    /**
+     * @test
+     * @throws CollectionException
+     */
+    public function equals_method_should_return_true_for_maps_with_same_elements_in_different_order(): void
     {
         $map1 = new Map(['1' => 1, '2' => 2]);
         $map2 = new Map(['2' => 2, '1' => 1]);
 
-        $this->assertFalse(
+        $this->assertTrue(
             $map1->equals($map2),
-            'Collections with same elements in different order should not be equal.'
+            'Maps with same elements in different order should be equal.'
         );
     }
 
-    /** @test */
+    /**
+     * @test
+     * @throws CollectionException
+     */
     public function equals_method_should_not_return_false_positive_for_maps_with_different_element_types(): void
     {
         $map1 = new Map(['1' => 1, '2' => 2]);

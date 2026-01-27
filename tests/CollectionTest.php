@@ -3,6 +3,7 @@
 namespace Emagister\Collections\Tests;
 
 use Emagister\Collections\Collection;
+use Emagister\Collections\CollectionException;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use stdClass;
 
@@ -218,19 +219,25 @@ class CollectionTest extends BaseTestCase
         $this->assertEquals($collection->toArray(), $clonedCollection->toArray());
     }
 
-    /** @test */
-    public function equals_method_should_not_return_false_positive_for_collections_with_same_elements_in_different_order(): void
+    /**
+     * @test
+     * @throws CollectionException
+     */
+    public function equals_method_should_return_true_for_collections_with_same_elements_in_different_order(): void
     {
         $collection1 = new Collection([1, 2]);
         $collection2 = new Collection([2, 1]);
 
-        $this->assertFalse(
+        $this->assertTrue(
             $collection1->equals($collection2),
-            'Collections with same elements in different order should not be equal.'
+            'Collections with same elements in different order should be equal.'
         );
     }
 
-    /** @test */
+    /**
+     * @test
+     * @throws CollectionException
+     */
     public function equals_method_should_not_return_false_positive_for_collections_with_different_element_types(): void
     {
         $collection1 = new Collection([1, 2]);
