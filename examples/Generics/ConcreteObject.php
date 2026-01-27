@@ -1,6 +1,6 @@
 <?php
 
-namespace Emagister\Collections\Tests;
+namespace Emagister\Collections\Examples\Generics;
 
 final class ConcreteObject
 {

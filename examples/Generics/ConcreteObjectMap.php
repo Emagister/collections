@@ -1,10 +1,9 @@
 <?php
 
-namespace Emagister\Collections\Tests\Map;
+namespace Emagister\Collections\Examples\Generics;
 
 use Closure;
 use Emagister\Collections\Map\HMap;
-use Emagister\Collections\Tests\ConcreteObject;
 
 /** @extends HMap<ConcreteObject> */
 final class ConcreteObjectMap extends HMap

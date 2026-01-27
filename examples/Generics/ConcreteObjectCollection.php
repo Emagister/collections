@@ -1,9 +1,8 @@
 <?php
 
-namespace Emagister\Collections\Tests\Collection;
+namespace Emagister\Collections\Examples\Generics;
 
 use Emagister\Collections\Collection\HCollection;
-use Emagister\Collections\Tests\ConcreteObject;
 
 /** @extends HCollection<ConcreteObject> */
 final class ConcreteObjectCollection extends HCollection
