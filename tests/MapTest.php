@@ -221,7 +221,7 @@ class MapTest extends BaseTestCase
      * @test
      * @throws CollectionException
      */
-    public function equals_method_should_not_return_false_positive_for_maps_with_different_element_types(): void
+    public function equals_method_should_check_element_types(): void
     {
         $map1 = new Map(['1' => 1, '2' => 2]);
         $map2 = new Map(['1' => '1', '2' => '2']);
