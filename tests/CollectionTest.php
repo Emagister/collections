@@ -70,7 +70,7 @@ class CollectionTest extends BaseTestCase
     }
 
     /** @test */
-    public function join_method_should_not_lose_data(): void
+    public function join_method_should_work_properly(): void
     {
         $collection = new Collection(['a', 'b', 'c']);
         $otherCollection = new Collection(['d', 'e', 'f']);
