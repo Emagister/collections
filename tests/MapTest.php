@@ -2,12 +2,14 @@
 
 namespace Emagister\Collections\Tests;
 
+use Emagister\Collections\CollectionException;
 use Emagister\Collections\Map;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class MapTest extends BaseTestCase
 {
-    /** @test */
+    #[Test]
     public function it_should_return_true_if_at_least_one_element_matches_the_predicate()
     {
         $map = new Map([
@@ -25,7 +27,7 @@ class MapTest extends BaseTestCase
         $this->assertTrue($thereAreEvenNumbers);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_true_if_more_than_one_elements_matches_the_predicate()
     {
         $collection = new Map([
@@ -44,7 +46,7 @@ class MapTest extends BaseTestCase
         $this->assertTrue($thereAreEvenNumbers);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_false_if_no_element_matches_the_predicate()
     {
         $collection = new Map([
@@ -61,7 +63,7 @@ class MapTest extends BaseTestCase
         $this->assertFalse($thereAreEvenNumbers);
     }
 
-    /** @test */
+    #[Test]
     public function is_should_partition_a_map()
     {
         $numbers = new Map([
@@ -84,7 +86,7 @@ class MapTest extends BaseTestCase
         $this->assertEquals(['one' => 1, 'three' => 3, 'five' => 5], $partition->last()->toArray());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_part_a_map()
     {
         $numbers = new Map([
@@ -107,7 +109,7 @@ class MapTest extends BaseTestCase
         $this->assertEquals(['one' => 1, 'three' => 3, 'five' => 5], $partition->last()->toArray());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_calculate_the_difference_of_two_collections()
     {
         $numbers = new Map([
@@ -134,7 +136,7 @@ class MapTest extends BaseTestCase
         $this->assertEquals(['one' => 1, 'three' => 3, 'five' => 5, 'seven' => 7], $diff->toArray());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_delete_elements_correctly(): void
     {
         $map = new Map([
@@ -152,7 +154,7 @@ class MapTest extends BaseTestCase
         $this->assertTrue($map->isEmpty());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_iterate_correctly_even_if_deleting_elements_while_iterating(): void
     {
         $map = new Map([
@@ -173,7 +175,7 @@ class MapTest extends BaseTestCase
         $this->assertEquals(['one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5], $iteratedElements);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_keep_keys_when_cloning_a_map(): void
     {
         $stringIndexedMap = new Map([
@@ -198,5 +200,36 @@ class MapTest extends BaseTestCase
         $clonedIntegerIndexedMap = $integerIndexedMap->clone();
 
         $this->assertEquals($integerIndexedMap->toArray(), $clonedIntegerIndexedMap->toArray());
+    }
+
+
+    /**
+     * @test
+     * @throws CollectionException
+     */
+    public function equals_method_should_return_true_for_maps_with_same_elements_in_different_order(): void
+    {
+        $map1 = new Map(['1' => 1, '2' => 2]);
+        $map2 = new Map(['2' => 2, '1' => 1]);
+
+        $this->assertTrue(
+            $map1->equals($map2),
+            'Maps with same elements in different order should be equal.'
+        );
+    }
+
+    /**
+     * @test
+     * @throws CollectionException
+     */
+    public function equals_method_should_check_element_types(): void
+    {
+        $map1 = new Map(['1' => 1, '2' => 2]);
+        $map2 = new Map(['1' => '1', '2' => '2']);
+
+        $this->assertFalse(
+            $map1->equals($map2),
+            'Collections with elements of different types should not be equal.'
+        );
     }
 }

@@ -76,10 +76,12 @@ jobs:
         env:
           ELEVATED_TOKEN: ${{ steps.generate_token.outputs.token }}
           NEW_VERSION: ${{ steps.create_tag.outputs.NEW_VERSION_NUMBER }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
-          PR_TITLE="${{ github.event.pull_request.title }}"
-          ESCAPED_PR_TITLE="${PR_TITLE//\'/\'\\\'\'}"
-          git tag -a "v$NEW_VERSION" -m "$ESCAPED_PR_TITLE"
+          MESSAGE_FILE="${GITHUB_WORKSPACE}/tag_message.txt"
+          printf "%s\n" "$PR_TITLE" > "$MESSAGE_FILE"
+
+          git tag -a "v$NEW_VERSION" -F "$MESSAGE_FILE"
 
           git push "https://x-access-token:$ELEVATED_TOKEN@github.com/${{ github.repository }}.git" "v$NEW_VERSION"
           git push "https://x-access-token:$ELEVATED_TOKEN@github.com/${{ github.repository }}.git" main
