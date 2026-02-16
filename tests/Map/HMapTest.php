@@ -1,14 +1,15 @@
 <?php
 
-namespace Emagister\Collections\Tests;
+namespace Emagister\Collections\Tests\Map;
 
 use Emagister\Collections\HomogeneityChecker;
 use Emagister\Collections\Map\HMap;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 class HMapTest extends BaseTestCase
 {
-    /** @test */
+    #[Test]
     public function head_method_should_return_first_element_of_a_collection()
     {
         $collection = new HMap(
@@ -23,7 +24,7 @@ class HMapTest extends BaseTestCase
         $this->assertEquals(1, $collection->head());
     }
 
-    /** @test */
+    #[Test]
     public function head_method_should_return_null_on_an_empty_collection()
     {
         $collection = new HMap(HomogeneityChecker::TYPE_NUMERIC);
@@ -31,7 +32,7 @@ class HMapTest extends BaseTestCase
         $this->assertNull($collection->head());
     }
 
-    /** @test */
+    #[Test]
     public function tail_method_should_return_empty_collection()
     {
         $collection = new HMap(HomogeneityChecker::TYPE_NUMERIC, ['one' => 1, 'two' => 2]);

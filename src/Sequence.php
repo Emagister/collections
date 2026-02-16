@@ -2,14 +2,22 @@
 
 namespace Emagister\Collections;
 
+use ArrayIterator;
 use Closure;
 use Countable;
 use Emagister\Collections\Map\HMap;
-use Iterator;
+use IteratorAggregate;
 use JsonSerializable;
+use Traversable;
 
-abstract class Sequence implements JsonSerializable, Iterator, Countable
+/**
+ * @template TKey
+ * @template TValue
+ * @implements IteratorAggregate<TKey, TValue>
+ */
+abstract class Sequence implements JsonSerializable, IteratorAggregate, Countable
 {
+    /** @var array<TKey, TValue> */
     protected array $elements = [];
 
     public function __construct(array $elements = [])
@@ -27,11 +35,13 @@ abstract class Sequence implements JsonSerializable, Iterator, Countable
         return new static($elements);
     }
 
+    /** @return array<TKey, TValue> */
     final public function toArray(): array
     {
         return $this->elements;
     }
 
+    /** @return array<TKey, TValue> */
     final public function jsonSerialize(): array
     {
         return $this->toArray();
@@ -91,11 +101,13 @@ abstract class Sequence implements JsonSerializable, Iterator, Countable
         );
     }
 
+    /** @param TValue $element */
     final public function contains($element): bool
     {
         return in_array($element, $this->elements, true);
     }
 
+    /** @param TValue $element */
     final public function containsWithClosure($element, Closure $callback): bool
     {
         return $this->exists(
@@ -172,6 +184,7 @@ abstract class Sequence implements JsonSerializable, Iterator, Countable
         ]);
     }
 
+    /** @return TValue */
     final public function head(): mixed
     {
         if ($this->isEmpty()) {
@@ -181,6 +194,7 @@ abstract class Sequence implements JsonSerializable, Iterator, Countable
         return current(array_slice($this->elements, 0, 1));
     }
 
+    /** @return TValue */
     final public function last(): mixed
     {
         if ($this->isEmpty()) {
@@ -209,7 +223,10 @@ abstract class Sequence implements JsonSerializable, Iterator, Countable
         return !is_null($this->find($callback));
     }
 
-    /** Returns the first element satisfying the callback. */
+    /**
+     * Returns the first element satisfying the callback.
+     * @return TValue|null
+     */
     final public function find(Closure $callback)
     {
         foreach ($this->elements as $element) {
@@ -217,9 +234,14 @@ abstract class Sequence implements JsonSerializable, Iterator, Countable
                 return $element;
             }
         }
+
+        return null;
     }
 
-    /** Returns the first element not satisfying the callback. */
+    /**
+     * Returns the first element not satisfying the callback.
+     * @return TValue|null
+     */
     final public function findNot(Closure $callback)
     {
         foreach ($this->elements as $element) {
@@ -227,6 +249,8 @@ abstract class Sequence implements JsonSerializable, Iterator, Countable
                 return $element;
             }
         }
+
+        return null;
     }
 
     /** Modifies the current sequence removing the elements satisfying the callback. */
@@ -308,6 +332,7 @@ abstract class Sequence implements JsonSerializable, Iterator, Countable
         return $carry;
     }
 
+    /** @return TValue|null */
     final public function randomElement(): mixed
     {
         return $this->elements[array_rand($this->elements)];
@@ -316,6 +341,12 @@ abstract class Sequence implements JsonSerializable, Iterator, Countable
     final public function shuffle(): void
     {
         shuffle($this->elements);
+    }
+
+    /** @return Traversable<TKey, TValue> */
+    public function getIterator(): Traversable
+    {
+        return new ArrayIterator($this->elements);
     }
 
     abstract public function each(Closure $callback): void;

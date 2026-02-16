@@ -4,12 +4,13 @@ namespace Emagister\Collections\Tests;
 
 use Emagister\Collections\Collection;
 use Emagister\Collections\CollectionException;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use stdClass;
 
 class CollectionTest extends BaseTestCase
 {
-    /** @test */
+    #[Test]
     public function head_method_should_return_first_element()
     {
         $collection = new Collection([1, 3, 5, 7, 9]);
@@ -17,7 +18,7 @@ class CollectionTest extends BaseTestCase
         $this->assertEquals(1, $collection->head());
     }
 
-    /** @test */
+    #[Test]
     public function head_method_should_return_null_on_an_empty_collection()
     {
         $collection = new Collection();
@@ -25,7 +26,7 @@ class CollectionTest extends BaseTestCase
         $this->assertNull($collection->head());
     }
 
-    /** @test */
+    #[Test]
     public function last_method_should_return_the_last_element()
     {
         $numbers = new Collection([1, 2, 3, 4, 5, 6]);
@@ -33,7 +34,7 @@ class CollectionTest extends BaseTestCase
         $this->assertEquals(6, $numbers->last());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_return_null_from_last_on_an_empty_collection()
     {
         $emptyCollection = new Collection();
@@ -41,7 +42,7 @@ class CollectionTest extends BaseTestCase
         $this->assertNull($emptyCollection->last());
     }
 
-    /** @test */
+    #[Test]
     public function tail_method_should_return_empty_collection()
     {
         $collection = new Collection([1, 2]);
@@ -57,7 +58,7 @@ class CollectionTest extends BaseTestCase
         $this->assertNull($emptyCollection->head());
     }
 
-    /** @test */
+    #[Test]
     public function filter_should_return_a_zero_indexed_collection()
     {
         $collection = new Collection([1, 2, 3, 4, 5, 6]);
@@ -69,7 +70,7 @@ class CollectionTest extends BaseTestCase
         $this->assertNotNull($evenNumbers->head());
     }
 
-    /** @test */
+    #[Test]
     public function join_method_should_work_properly(): void
     {
         $collection = new Collection(['a', 'b', 'c']);
@@ -89,10 +90,8 @@ class CollectionTest extends BaseTestCase
         );
     }
 
-    /**
-     * @test
-     * @throws CollectionException
-     */
+    /** @throws CollectionException */
+    #[Test]
     public function it_should_part_a_collection()
     {
         $numbers = new Collection([1, 2, 3, 4, 5, 6]);
@@ -108,10 +107,8 @@ class CollectionTest extends BaseTestCase
         $this->assertEquals([1, 3, 5], $partition->last()->toArray());
     }
 
-    /**
-     * @test
-     * @throws CollectionException
-     */
+    /** @throws CollectionException */
+    #[Test]
     public function partition_method_should_not_lose_data_for_elements_with_different_types(): void
     {
         $collection = new Collection([1, '1']);
@@ -128,10 +125,8 @@ class CollectionTest extends BaseTestCase
         $this->assertTrue($noIntCollection->contains('1'), 'No-integer collection should contain string value');
     }
 
-    /**
-     * @test
-     * @throws CollectionException
-     */
+    /** @throws CollectionException */
+    #[Test]
     public function it_should_calculate_the_difference_of_two_collections()
     {
         $numbers = new Collection([1, 3, 4, 5, 6, 7, 8]);
@@ -142,10 +137,8 @@ class CollectionTest extends BaseTestCase
         $this->assertEquals([1, 3, 5, 7], $diff->toArray());
     }
 
-    /**
-     * @test
-     * @throws CollectionException
-     */
+    /** @throws CollectionException */
+    #[Test]
     public function diff_method_should_work_properly_with_elements_with_different_types()
     {
         $numbers = new Collection([1, 3, 4, 5, 6, 7, 8]);
@@ -156,7 +149,7 @@ class CollectionTest extends BaseTestCase
         $this->assertEquals([1, 3, 5, 6, 7], $diff->toArray());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_delete_elements_correctly(): void
     {
         $collection = new Collection([1, 2, 3, 4, 5]);
@@ -168,7 +161,7 @@ class CollectionTest extends BaseTestCase
         $this->assertTrue($collection->isEmpty());
     }
 
-    /** @test */
+    #[Test]
     public function it_should_iterate_correctly_even_if_deleting_elements_while_iterating(): void
     {
         $collection = new Collection([1, 2, 3, 4, 5]);
@@ -182,8 +175,7 @@ class CollectionTest extends BaseTestCase
         $this->assertEquals([1, 2, 3, 4, 5], $iteratedElements);
     }
 
-
-    /** @test */
+    #[Test]
     public function it_should_perform_a_deep_clone_when_cloning_the_collection(): void
     {
         $element1 = new stdClass();
@@ -221,7 +213,7 @@ class CollectionTest extends BaseTestCase
         $this->assertEquals('cloned element 2 new value', $clonedElement2->value);
     }
 
-    /** @test */
+    #[Test]
     public function it_should_clone_a_non_object_collection_successfully(): void
     {
         $collection = new Collection([1, 2, 3, 4, 5]);
@@ -231,10 +223,8 @@ class CollectionTest extends BaseTestCase
         $this->assertEquals($collection->toArray(), $clonedCollection->toArray());
     }
 
-    /**
-     * @test
-     * @throws CollectionException
-     */
+    /** @throws CollectionException */
+    #[Test]
     public function equals_method_should_return_true_for_collections_with_same_elements_in_different_order(): void
     {
         $collection1 = new Collection([1, 2]);
@@ -246,10 +236,8 @@ class CollectionTest extends BaseTestCase
         );
     }
 
-    /**
-     * @test
-     * @throws CollectionException
-     */
+    /** @throws CollectionException */
+    #[Test]
     public function equals_method_should_check_element_types(): void
     {
         $collection1 = new Collection([1, 2]);
