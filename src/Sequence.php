@@ -104,7 +104,7 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
     /** @param TValue $element */
     final public function contains($element): bool
     {
-        return array_search($element, $this->elements) !== false;
+        return in_array($element, $this->elements, true);
     }
 
     /** @param TValue $element */
@@ -299,7 +299,7 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
 
     final public function clone(): Sequence
     {
-        $clonedElements = array_map(fn ($element) => is_object($element) ? clone $element : $element, $this->elements);
+        $clonedElements = array_map(fn($element) => is_object($element) ? clone $element : $element, $this->elements);
 
         return $this->createSequence($clonedElements);
     }

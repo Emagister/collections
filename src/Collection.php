@@ -53,7 +53,8 @@ class Collection extends Sequence
     {
         return new Collection(
             array_merge(
-                $this->elements + $collection->toArray()
+                $this->elements,
+                $collection->toArray()
             )
         );
     }

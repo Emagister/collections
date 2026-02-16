@@ -2,6 +2,7 @@
 
 namespace Emagister\Collections\Tests;
 
+use Emagister\Collections\CollectionException;
 use Emagister\Collections\Map;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
@@ -199,5 +200,36 @@ class MapTest extends BaseTestCase
         $clonedIntegerIndexedMap = $integerIndexedMap->clone();
 
         $this->assertEquals($integerIndexedMap->toArray(), $clonedIntegerIndexedMap->toArray());
+    }
+
+
+    /**
+     * @test
+     * @throws CollectionException
+     */
+    public function equals_method_should_return_true_for_maps_with_same_elements_in_different_order(): void
+    {
+        $map1 = new Map(['1' => 1, '2' => 2]);
+        $map2 = new Map(['2' => 2, '1' => 1]);
+
+        $this->assertTrue(
+            $map1->equals($map2),
+            'Maps with same elements in different order should be equal.'
+        );
+    }
+
+    /**
+     * @test
+     * @throws CollectionException
+     */
+    public function equals_method_should_check_element_types(): void
+    {
+        $map1 = new Map(['1' => 1, '2' => 2]);
+        $map2 = new Map(['1' => '1', '2' => '2']);
+
+        $this->assertFalse(
+            $map1->equals($map2),
+            'Collections with elements of different types should not be equal.'
+        );
     }
 }
