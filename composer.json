@@ -19,5 +19,6 @@
             "Emagister\\Collections\\Tests\\": "tests",
             "Emagister\\Collections\\Examples\\": "examples"
         }
-    }
+    },
+    "version": "1.2.0"
 }
