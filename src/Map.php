@@ -10,7 +10,7 @@ use Closure;
  */
 class Map extends Sequence
 {
-    public function __construct(array $elements = [], Closure $elementKeyClosure = null)
+    public function __construct(array $elements = [], ?Closure $elementKeyClosure = null)
     {
         if (!is_null($elementKeyClosure)) {
             $elements = $this->indexElementsUsingClosure($elements, $elementKeyClosure);
