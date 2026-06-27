@@ -15,6 +15,11 @@ calculate_next_version() {
 
     IFS='.' read -r major minor patch <<< "$current_version_no_v"
 
+    if ! [[ "$major" =~ ^[0-9]+$ && "$minor" =~ ^[0-9]+$ && "$patch" =~ ^[0-9]+$ ]]; then
+        echo "Error: tag '$latest_tag' no tiene formato semver válido (X.Y.Z)" >&2
+        return 1
+    fi
+
     case "$increment_type" in
         major)
             major=$((major + 1))
