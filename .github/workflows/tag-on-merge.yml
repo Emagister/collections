@@ -29,8 +29,9 @@ jobs:
 
       - name: Determine Version Increment Type
         id: determine
+        env:
+          BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
         run: |
-          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
           INCREMENT_TYPE="patch"
 
           case "$BRANCH_NAME" in
