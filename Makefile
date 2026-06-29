@@ -7,7 +7,7 @@ install:
 	$(COMPOSER) install --no-interaction --prefer-dist
 
 lint:
-	$(PHP) find src tests -name "*.php" -exec php -l {} +
+	$(PHP) find src tests -name "*.php" -exec php -l {} \;
 
 test:
 	$(PHP) vendor/bin/phpunit
