@@ -1,5 +1,5 @@
-PHP      := docker run --rm -v "$(PWD):/app" -w /app php:8.1-cli
-COMPOSER := docker run --rm -v "$(PWD):/app" -w /app composer:2
+PHP      := docker run --rm -v "$(CURDIR):/app" -w /app --user $(shell id -u):$(shell id -g) php:8.1-cli
+COMPOSER := docker run --rm -v "$(CURDIR):/app" -w /app --user $(shell id -u):$(shell id -g) composer:2
 
 .PHONY: install lint test phpcs cs-fixer
 
