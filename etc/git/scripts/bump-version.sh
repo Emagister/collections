@@ -13,6 +13,7 @@ calculate_next_version() {
 
     local current_version_no_v=$(echo "$latest_tag" | sed 's/^v//')
 
+    local major minor patch
     IFS='.' read -r major minor patch <<< "$current_version_no_v"
 
     if ! [[ "$major" =~ ^[0-9]+$ && "$minor" =~ ^[0-9]+$ && "$patch" =~ ^[0-9]+$ ]]; then
