@@ -79,4 +79,4 @@ jobs:
           git tag -a "$NEW_TAG" -F "$MESSAGE_FILE"
 
           git push "https://x-access-token:$ELEVATED_TOKEN@github.com/${{ github.repository }}.git" "$NEW_TAG"
-          git push "https://x-access-token:$ELEVATED_TOKEN@github.com/${{ github.repository }}.git" main
+          git push "https://x-access-token:$ELEVATED_TOKEN@github.com/${{ github.repository }}.git" HEAD:main
