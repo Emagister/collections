@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<ruleset name="Collections">
+    <file>src</file>
+    <file>tests</file>
+
+    <rule ref="PSR12"/>
+
+    <!-- PHPUnit test methods use snake_case for descriptive naming -->
+    <rule ref="PSR1.Methods.CamelCapsMethodName">
+        <exclude-pattern>tests/</exclude-pattern>
+    </rule>
+</ruleset>

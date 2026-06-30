@@ -13,13 +13,15 @@ class HMapTest extends BaseTestCase
     public function head_method_should_return_first_element_of_a_collection()
     {
         $collection = new HMap(
-            HomogeneityChecker::TYPE_NUMERIC, [
+            HomogeneityChecker::TYPE_NUMERIC,
+            [
                 'one' => 1,
                 'three' => 3,
                 'five' => 5,
                 'seven' => 7,
-                'nine' => 9
-            ]);
+                'nine' => 9,
+            ]
+        );
 
         $this->assertEquals(1, $collection->head());
     }

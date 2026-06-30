@@ -16,4 +16,4 @@ phpcs:
 	$(PHP) vendor/bin/phpcs src tests
 
 cs-fixer:
-	$(PHP) vendor/bin/php-cs-fixer fix --dry-run --diff
+	$(PHP) vendor/bin/php-cs-fixer fix --dry-run --diff --allow-risky=yes
