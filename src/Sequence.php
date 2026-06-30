@@ -236,7 +236,6 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
                 return $element;
             }
         }
-
     }
 
     /**
@@ -251,7 +250,6 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
                 return $element;
             }
         }
-
     }
 
     /** Modifies the current sequence removing the elements satisfying the callback. */
