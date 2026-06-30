@@ -2,3 +2,6 @@
 /composer.lock
 .idea
 .phpunit.result.cache
+.claude/
+.php-cs-fixer.cache
+skills-lock.json
