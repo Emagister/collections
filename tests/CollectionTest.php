@@ -11,7 +11,7 @@ use stdClass;
 class CollectionTest extends BaseTestCase
 {
     #[Test]
-    public function head_method_should_return_first_element()
+    public function head_method_should_return_first_element(): void
     {
         $collection = new Collection([1, 3, 5, 7, 9]);
 
@@ -19,7 +19,7 @@ class CollectionTest extends BaseTestCase
     }
 
     #[Test]
-    public function head_method_should_return_null_on_an_empty_collection()
+    public function head_method_should_return_null_on_an_empty_collection(): void
     {
         $collection = new Collection();
 
@@ -27,7 +27,7 @@ class CollectionTest extends BaseTestCase
     }
 
     #[Test]
-    public function last_method_should_return_the_last_element()
+    public function last_method_should_return_the_last_element(): void
     {
         $numbers = new Collection([1, 2, 3, 4, 5, 6]);
 
@@ -35,7 +35,7 @@ class CollectionTest extends BaseTestCase
     }
 
     #[Test]
-    public function it_should_return_null_from_last_on_an_empty_collection()
+    public function it_should_return_null_from_last_on_an_empty_collection(): void
     {
         $emptyCollection = new Collection();
 
@@ -43,7 +43,7 @@ class CollectionTest extends BaseTestCase
     }
 
     #[Test]
-    public function tail_method_should_return_empty_collection()
+    public function tail_method_should_return_empty_collection(): void
     {
         $collection = new Collection([1, 2]);
 
@@ -59,7 +59,7 @@ class CollectionTest extends BaseTestCase
     }
 
     #[Test]
-    public function filter_should_return_a_zero_indexed_collection()
+    public function filter_should_return_a_zero_indexed_collection(): void
     {
         $collection = new Collection([1, 2, 3, 4, 5, 6]);
 
@@ -92,7 +92,7 @@ class CollectionTest extends BaseTestCase
 
     /** @throws CollectionException */
     #[Test]
-    public function it_should_part_a_collection()
+    public function it_should_part_a_collection(): void
     {
         $numbers = new Collection([1, 2, 3, 4, 5, 6]);
 
@@ -127,7 +127,7 @@ class CollectionTest extends BaseTestCase
 
     /** @throws CollectionException */
     #[Test]
-    public function it_should_calculate_the_difference_of_two_collections()
+    public function it_should_calculate_the_difference_of_two_collections(): void
     {
         $numbers = new Collection([1, 3, 4, 5, 6, 7, 8]);
         $evenNumbers = new Collection([2, 4, 6, 8, 10]);
@@ -139,7 +139,7 @@ class CollectionTest extends BaseTestCase
 
     /** @throws CollectionException */
     #[Test]
-    public function diff_method_should_work_properly_with_elements_with_different_types()
+    public function diff_method_should_work_properly_with_elements_with_different_types(): void
     {
         $numbers = new Collection([1, 3, 4, 5, 6, 7, 8]);
         $evenNumbers = new Collection(['2', 4, '6', 8, '10']);

@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 class HMapTest extends BaseTestCase
 {
     #[Test]
-    public function head_method_should_return_first_element_of_a_collection()
+    public function head_method_should_return_first_element_of_a_collection(): void
     {
         $collection = new HMap(
             HomogeneityChecker::TYPE_NUMERIC,
@@ -27,7 +27,7 @@ class HMapTest extends BaseTestCase
     }
 
     #[Test]
-    public function head_method_should_return_null_on_an_empty_collection()
+    public function head_method_should_return_null_on_an_empty_collection(): void
     {
         $collection = new HMap(HomogeneityChecker::TYPE_NUMERIC);
 
@@ -35,7 +35,7 @@ class HMapTest extends BaseTestCase
     }
 
     #[Test]
-    public function tail_method_should_return_empty_collection()
+    public function tail_method_should_return_empty_collection(): void
     {
         $collection = new HMap(HomogeneityChecker::TYPE_NUMERIC, ['one' => 1, 'two' => 2]);
 

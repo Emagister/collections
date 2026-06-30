@@ -10,6 +10,7 @@ use Emagister\Collections\Sequence;
 
 /**
  * @template TValue
+ *
  * @extends Map<TValue>
  */
 class HMap extends Map
@@ -32,6 +33,7 @@ class HMap extends Map
 
     /**
      * @param TValue $value
+     *
      * @throws CollectionException
      */
     public function add(string $key, $value): void
@@ -48,17 +50,17 @@ class HMap extends Map
 
     /**
      * @param array<string, TValue> $elements
-     * @return HMap<TValue>
+     *
      * @throws CollectionException
+     *
+     * @return HMap<TValue>
      */
     protected function createSequence(array $elements): HMap
     {
         return new static($this->type, $elements);
     }
 
-    /**
-     * @throws CollectionException
-     */
+    /** @throws CollectionException */
     protected function ensureSequencesAreCompatible(Sequence $sequence): void
     {
         parent::ensureSequencesAreCompatible($sequence);

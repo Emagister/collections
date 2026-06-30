@@ -4,7 +4,9 @@ namespace Emagister\Collections\Map;
 
 use Emagister\Collections\HomogeneityChecker;
 
-/** @extends HMap<string> */
+/**
+ * @extends HMap<string>
+ */
 class StringMap extends HMap
 {
     public const ORDER_ASC = 'ASC';
