@@ -3,6 +3,7 @@
 namespace Emagister\Collections;
 
 use Closure;
+use Emagister\Collections\Comparator;
 
 /**
  * @template TValue
@@ -112,6 +113,14 @@ class Map extends Sequence
     final public function keys(): array
     {
         return array_map(fn($key) => (string) $key, array_keys($this->elements));
+    }
+
+    public function sortWith(Comparator $comparator): static
+    {
+        $elements = $this->elements;
+        uasort($elements, [$comparator, 'compare']);
+
+        return $this->createSequence($elements);
     }
 
     final public function usort(callable $callback): Map
