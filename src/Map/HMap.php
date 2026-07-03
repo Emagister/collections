@@ -20,7 +20,7 @@ class HMap extends Map
     private string $type;
 
     /** @throws CollectionException */
-    public function __construct(string $type, array $elements = [], Closure $elementKeyClosure = null)
+    public function __construct(string $type, array $elements = [], ?Closure $elementKeyClosure = null)
     {
         $this->type = $type;
         $this->homogeneityChecker = new HomogeneityChecker($type);
