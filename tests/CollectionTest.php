@@ -201,7 +201,7 @@ class CollectionTest extends BaseTestCase
     }
 
     #[Test]
-    public function remove_method_should_not_remove_an_element_of_a_different_type(): void
+    public function remove_method_should_only_remove_the_strictly_equal_element(): void
     {
         $collection = new Collection([1, '1']);
 
