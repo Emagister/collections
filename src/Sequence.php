@@ -49,17 +49,18 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
 
     public function remove($element): bool
     {
-        $elementKey = array_search($element, $this->elements);
+        foreach ($this->elements as $key => $sequenceElement) {
+            if ($this->elementsAreEqual($sequenceElement, $element)) {
+                unset($this->elements[$key]);
 
-        if ($elementKey === false) {
-            return false;
+                return true;
+            }
         }
 
-        unset($this->elements[$elementKey]);
-
-        return true;
+        return false;
     }
 
+    /** @throws CollectionException */
     final public function merge(Sequence $sequence): Sequence
     {
         $this->ensureSequencesAreCompatible($sequence);
@@ -104,7 +105,26 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
     /** @param TValue $element */
     final public function contains($element): bool
     {
-        return in_array($element, $this->elements, true);
+        foreach ($this->elements as $sequenceElement) {
+            if ($this->elementsAreEqual($sequenceElement, $element)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Scalars must match by identity/type (strict), so collections keep distinguishing
+     * e.g. 1 from '1'. Objects match by value, so a clone is considered equal to its source.
+     */
+    private function elementsAreEqual($a, $b): bool
+    {
+        if ($a === $b) {
+            return true;
+        }
+
+        return is_object($a) && is_object($b) && $a == $b;
     }
 
     /** @param TValue $element */

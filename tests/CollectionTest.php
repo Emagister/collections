@@ -125,6 +125,39 @@ class CollectionTest extends BaseTestCase
         $this->assertTrue($noIntCollection->contains('1'), 'No-integer collection should contain string value');
     }
 
+    #[Test]
+    public function contains_method_should_use_value_equality_for_objects(): void
+    {
+        $phpCourse = new stdClass();
+        $phpCourse->name = 'Advanced PHP';
+
+        $sameCourseDifferentInstance = clone $phpCourse;
+
+        $collection = new Collection([$phpCourse]);
+
+        $this->assertTrue(
+            $collection->contains($sameCourseDifferentInstance),
+            'Collection should contain an object that is equal by value, even if it is a different instance.'
+        );
+    }
+
+    #[Test]
+    public function contains_method_should_return_false_for_objects_with_different_property_values(): void
+    {
+        $phpCourse = new stdClass();
+        $phpCourse->name = 'Advanced PHP';
+
+        $javascriptCourse = new stdClass();
+        $javascriptCourse->name = 'Advanced JavaScript';
+
+        $collection = new Collection([$phpCourse]);
+
+        $this->assertFalse(
+            $collection->contains($javascriptCourse),
+            'Collection should not contain an object whose properties differ from any element.'
+        );
+    }
+
     /** @throws CollectionException */
     #[Test]
     public function it_should_calculate_the_difference_of_two_collections()
@@ -147,6 +180,34 @@ class CollectionTest extends BaseTestCase
         $diff = $numbers->diff($evenNumbers);
 
         $this->assertEquals([1, 3, 5, 6, 7], $diff->toArray());
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function diff_method_should_treat_a_cloned_collection_as_having_no_differences(): void
+    {
+        $element = new stdClass();
+        $element->name = 'Collections Library';
+
+        $collection = new Collection([$element]);
+        $clonedCollection = $collection->clone();
+
+        $diff = $collection->diff($clonedCollection);
+
+        $this->assertTrue(
+            $diff->isEmpty(),
+            'Diffing a collection against its own clone should yield no differences.'
+        );
+    }
+
+    #[Test]
+    public function remove_method_should_not_remove_an_element_of_a_different_type(): void
+    {
+        $collection = new Collection([1, '1']);
+
+        $collection->remove('1');
+
+        $this->assertEquals([1], $collection->toArray());
     }
 
     #[Test]
