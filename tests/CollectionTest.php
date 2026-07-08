@@ -125,6 +125,39 @@ class CollectionTest extends BaseTestCase
         $this->assertTrue($noIntCollection->contains('1'), 'No-integer collection should contain string value');
     }
 
+    #[Test]
+    public function contains_method_should_use_value_equality_for_objects(): void
+    {
+        $object = new stdClass();
+        $object->name = 'Advanced PHP';
+
+        $sameValueDifferentInstance = clone $object;
+
+        $collection = new Collection([$object]);
+
+        $this->assertTrue(
+            $collection->contains($sameValueDifferentInstance),
+            'Collection should contain an object that is equal by value, even if it is a different instance.'
+        );
+    }
+
+    #[Test]
+    public function contains_method_should_return_false_for_objects_with_different_property_values(): void
+    {
+        $object = new stdClass();
+        $object->name = 'Advanced PHP';
+
+        $differentObject = new stdClass();
+        $differentObject->name = 'Advanced JavaScript';
+
+        $collection = new Collection([$object]);
+
+        $this->assertFalse(
+            $collection->contains($differentObject),
+            'Collection should not contain an object whose properties differ from any element.'
+        );
+    }
+
     /** @throws CollectionException */
     #[Test]
     public function it_should_calculate_the_difference_of_two_collections(): void
@@ -147,6 +180,84 @@ class CollectionTest extends BaseTestCase
         $diff = $numbers->diff($evenNumbers);
 
         $this->assertEquals([1, 3, 5, 6, 7], $diff->toArray());
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function diff_method_should_treat_a_cloned_collection_as_having_no_differences(): void
+    {
+        $element = new stdClass();
+        $element->name = 'Collections Library';
+
+        $collection = new Collection([$element]);
+        $clonedCollection = $collection->clone();
+
+        $diff = $collection->diff($clonedCollection);
+
+        $this->assertTrue(
+            $diff->isEmpty(),
+            'Diffing a collection against its own clone should yield no differences.'
+        );
+    }
+
+    #[Test]
+    public function remove_method_should_only_remove_the_strictly_equal_element(): void
+    {
+        $collection = new Collection([1, '1']);
+
+        $collection->remove('1');
+
+        $this->assertEquals([1], $collection->toArray());
+    }
+
+    #[Test]
+    public function remove_method_should_not_remove_anything_when_element_is_not_present(): void
+    {
+        $collection = new Collection([1, 2, 3]);
+
+        $removed = $collection->remove(4);
+
+        $this->assertFalse($removed, 'Removing an absent element should return false.');
+        $this->assertEquals([1, 2, 3], $collection->toArray());
+    }
+
+    #[Test]
+    public function remove_method_should_use_value_equality_for_objects(): void
+    {
+        $object = new stdClass();
+        $object->name = 'Advanced PHP';
+
+        $sameValueDifferentInstance = clone $object;
+
+        $collection = new Collection([$object]);
+
+        $removed = $collection->remove($sameValueDifferentInstance);
+
+        $this->assertTrue(
+            $removed,
+            'Collection should remove an object that is equal by value, even if it is a different instance.'
+        );
+        $this->assertTrue($collection->isEmpty());
+    }
+
+    #[Test]
+    public function remove_method_should_not_remove_objects_with_different_property_values(): void
+    {
+        $object = new stdClass();
+        $object->name = 'Advanced PHP';
+
+        $differentObject = new stdClass();
+        $differentObject->name = 'Advanced JavaScript';
+
+        $collection = new Collection([$object]);
+
+        $removed = $collection->remove($differentObject);
+
+        $this->assertFalse(
+            $removed,
+            'Collection should not remove an object whose properties differ from any element.'
+        );
+        $this->assertEquals([$object], $collection->toArray());
     }
 
     #[Test]
