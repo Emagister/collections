@@ -114,10 +114,6 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
         return false;
     }
 
-    /**
-     * Scalars must match by identity/type (strict), so collections keep distinguishing
-     * e.g. 1 from '1'. Objects match by value, so a clone is considered equal to its source.
-     */
     private function elementsAreEqual($a, $b): bool
     {
         if ($a === $b) {
