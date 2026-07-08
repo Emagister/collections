@@ -1,3 +1,25 @@
+## v1.5.1
+
+### [1.5.1](https://github.com/Emagister/collections/compare/v1.5.0...v1.5.1) (2026-07-08)
+
+
+### Bug Fixes
+
+* use value equality for objects in contains()/remove(), keep strict scalar comparison ([e4ad273](https://github.com/Emagister/collections/commit/e4ad2735e977207c3e1d4780444935f4e71c6f7b))
+
+
+### Code Refactoring
+
+* remove redundant comment on elementsAreEqual() ([c6230e1](https://github.com/Emagister/collections/commit/c6230e11a9cdcb4902a04e20a737e980393882d5))
+
+
+### Tests
+
+* extend remove() coverage for object value-equality and absent elements ([a0eb124](https://github.com/Emagister/collections/commit/a0eb1245e73d026520fdac92792b8c7edceba168))
+* rename remove() type-safety test to reflect strict-match behavior ([38ff022](https://github.com/Emagister/collections/commit/38ff022d95fe5afea1668980ba767aa39c9be41a))
+
+
+
 ## v1.5.0
 
 ## [1.5.0](https://github.com/Emagister/collections/compare/v1.4.0...v1.5.0) (2026-07-08)
