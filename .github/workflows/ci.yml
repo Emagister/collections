@@ -30,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
       - name: Run tests
-        run: composer run test
+        run: composer run tests
 
   code-sniffer:
     name: PHP CodeSniffer

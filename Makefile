@@ -9,7 +9,7 @@ lint:
 	$(COMPOSER) run lint
 
 test:
-	$(COMPOSER) run test
+	$(COMPOSER) run tests
 
 phpcs:
 	$(COMPOSER) run phpcs

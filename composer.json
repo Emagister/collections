@@ -29,7 +29,7 @@
     },
     "scripts": {
         "lint": "find src tests -name '*.php' -exec php -l {} \\;",
-        "test": "phpunit",
+        "tests": "phpunit",
         "phpcs": "phpcs",
         "cs-fixer": "php-cs-fixer fix --dry-run --diff --allow-risky=yes"
     },
