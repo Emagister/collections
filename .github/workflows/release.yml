@@ -46,6 +46,12 @@ jobs:
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer
+
       - name: Update composer.json and CHANGELOG.md
         env:
           NEW_VERSION: ${{ steps.tag_version.outputs.new_version }}
@@ -54,6 +60,8 @@ jobs:
         run: |
           jq --indent 4 --arg newVersion "$NEW_VERSION" '.version = $newVersion' composer.json > composer.json.tmp
           mv composer.json.tmp composer.json
+
+          composer update --lock --no-interaction --no-progress
 
           HEADER="## $NEW_TAG"
           if [ -f "CHANGELOG.md" ]; then
@@ -66,7 +74,7 @@ jobs:
           git config user.name 'GitHub Actions'
           git config user.email 'actions@github.com'
 
-          git add composer.json CHANGELOG.md
+          git add composer.json composer.lock CHANGELOG.md
           git commit -m "chore(release): Bump version to $NEW_VERSION [skip ci]"
 
       - name: Tag and Push release
