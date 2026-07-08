@@ -3,7 +3,6 @@
 namespace Emagister\Collections;
 
 use Closure;
-use Emagister\Collections\Comparator;
 
 /**
  * @template TValue

@@ -2,6 +2,9 @@
 
 namespace Emagister\Collections;
 
+/**
+ * @internal
+ */
 final class ReverseComparator implements Comparator
 {
     public function __construct(private readonly Comparator $inner) {}
