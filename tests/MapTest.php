@@ -207,7 +207,7 @@ class MapTest extends BaseTestCase
     #[Test]
     public function sort_with_should_preserve_string_keys_after_sorting(): void
     {
-        $comparator = new class() implements Comparator {
+        $comparator = new class () implements Comparator {
             use ComparatorBehavior;
 
             public function compare(mixed $a, mixed $b): int
