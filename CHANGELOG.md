@@ -1,3 +1,5 @@
+# Changelog
+
 ## v1.5.1
 
 ### [1.5.1](https://github.com/Emagister/collections/compare/v1.5.0...v1.5.1) (2026-07-08)
@@ -47,8 +49,6 @@
 * **ci:** use composer scripts as single source of truth ([b043ef1](https://github.com/Emagister/collections/commit/b043ef1a4aac7311cef1e22b179dbac60a99309e))
 
 
-
-# Changelog
 
 ## v1.4.0
 

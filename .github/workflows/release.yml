@@ -63,14 +63,15 @@ jobs:
 
           composer update --lock --no-interaction --no-progress
 
-          HEADER="## $NEW_TAG"
-          if [ -f "CHANGELOG.md" ]; then
-            printf "%s\n\n%s\n\n" "$HEADER" "$CHANGELOG" | cat - CHANGELOG.md > CHANGELOG.md.tmp
-            mv CHANGELOG.md.tmp CHANGELOG.md
+          # Prepend new entry to CHANGELOG.md
+          HEADER="# Changelog"
+          if [ -f CHANGELOG.md ]; then
+            EXISTING=$(tail -n +2 CHANGELOG.md)
           else
-            printf "# Changelog\n\n%s\n\n%s\n" "$HEADER" "$CHANGELOG" > CHANGELOG.md
+            EXISTING=""
           fi
-
+          printf '%s\n\n%s\n\n%s\n' "$HEADER" "$CHANGELOG" "$EXISTING" > CHANGELOG.md
+          
           git config user.name 'GitHub Actions'
           git config user.email 'actions@github.com'
 
