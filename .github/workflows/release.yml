@@ -1,0 +1,92 @@
+name: Release
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: release-main
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Generate App Token for Elevated Access
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.generate_token.outputs.token }}
+          ref: main
+
+      - name: Calculate Next Version
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ steps.generate_token.outputs.token }}
+          dry_run: true
+          default_bump: patch
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer
+
+      - name: Update composer.json and CHANGELOG.md
+        env:
+          NEW_VERSION: ${{ steps.tag_version.outputs.new_version }}
+          NEW_TAG: ${{ steps.tag_version.outputs.new_tag }}
+          CHANGELOG: ${{ steps.tag_version.outputs.changelog }}
+        run: |
+          jq --indent 4 --arg newVersion "$NEW_VERSION" '.version = $newVersion' composer.json > composer.json.tmp
+          mv composer.json.tmp composer.json
+
+          composer update --lock --no-interaction --no-progress
+
+          HEADER="## $NEW_TAG"
+          if [ -f "CHANGELOG.md" ]; then
+            printf "%s\n\n%s\n\n" "$HEADER" "$CHANGELOG" | cat - CHANGELOG.md > CHANGELOG.md.tmp
+            mv CHANGELOG.md.tmp CHANGELOG.md
+          else
+            printf "# Changelog\n\n%s\n\n%s\n" "$HEADER" "$CHANGELOG" > CHANGELOG.md
+          fi
+
+          git config user.name 'GitHub Actions'
+          git config user.email 'actions@github.com'
+
+          git add composer.json composer.lock CHANGELOG.md
+          git commit -m "chore(release): Bump version to $NEW_VERSION [skip ci]"
+
+      - name: Tag and Push release
+        env:
+          ELEVATED_TOKEN: ${{ steps.generate_token.outputs.token }}
+          NEW_TAG: ${{ steps.tag_version.outputs.new_tag }}
+          CHANGELOG: ${{ steps.tag_version.outputs.changelog }}
+        run: |
+          MESSAGE_FILE="${RUNNER_TEMP}/tag_message.txt"
+          printf "%s\n" "$CHANGELOG" > "$MESSAGE_FILE"
+
+          git tag -a "$NEW_TAG" -F "$MESSAGE_FILE"
+
+          git push "https://x-access-token:$ELEVATED_TOKEN@github.com/${{ github.repository }}.git" "$NEW_TAG"
+          git push "https://x-access-token:$ELEVATED_TOKEN@github.com/${{ github.repository }}.git" HEAD:main

@@ -1,7 +1,7 @@
 /vendor/
-/composer.lock
 .idea
 .phpunit.result.cache
-.claude/
 .php-cs-fixer.cache
+.agents
+.claude/
 skills-lock.json

@@ -6,6 +6,7 @@ use Closure;
 
 /**
  * @template TValue
+ *
  * @extends Sequence<int, TValue>
  */
 class Collection extends Sequence

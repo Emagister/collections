@@ -7,6 +7,7 @@ use InvalidArgumentException;
 
 /**
  * @template TValue
+ *
  * @extends Collection<TValue>
  */
 abstract class SpecificCollection extends Collection
