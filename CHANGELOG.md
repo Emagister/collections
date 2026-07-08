@@ -1,3 +1,31 @@
+## v1.5.0
+
+## [1.5.0](https://github.com/Emagister/collections/compare/v1.4.0...v1.5.0) (2026-07-08)
+
+
+### Features
+
+* **ci:** add PR validation workflow with lint, tests, CodeSniffer and CS Fixer ([f6336ac](https://github.com/Emagister/collections/commit/f6336accf702949e1cad2425de8cca1e70aaabd9)), closes [#11](https://github.com/Emagister/collections/issues/11)
+
+
+### Bug Fixes
+
+* **ci:** add phpcs.xml.dist and pass --allow-risky to CS Fixer ([b06d9f8](https://github.com/Emagister/collections/commit/b06d9f8951c984b8bedb30e14cff7f3e7265f2ae))
+* **ci:** apply CS Fixer formatting and pin platform to PHP 8.1 ([88bbd42](https://github.com/Emagister/collections/commit/88bbd423b6e1fbab6871b675c9776dbe2dc87526))
+* **cs:** remove blank lines before closing brace in find/findNot ([bc2fa46](https://github.com/Emagister/collections/commit/bc2fa464df333cce056b428f04e882b8c15a1ab7))
+* **cs-fixer:** fail fast on missing or invalid rules JSON ([eef87e0](https://github.com/Emagister/collections/commit/eef87e09964838b889c0030399cb882a852ea152)), closes [#25](https://github.com/Emagister/collections/issues/25)
+* **Makefile:** lint each PHP file separately ([19ac8f0](https://github.com/Emagister/collections/commit/19ac8f088a75ac6ca4ea894419159645d755de58)), closes [#24](https://github.com/Emagister/collections/issues/24)
+* **Makefile:** use CURDIR and preserve host user in Docker ([c5f4b05](https://github.com/Emagister/collections/commit/c5f4b05f69e05362711d1ad52750782c1776b43c)), closes [#26](https://github.com/Emagister/collections/issues/26)
+
+
+### Code Refactoring
+
+* **ci:** let phpcs read paths from phpcs.xml.dist ([4c5f3a9](https://github.com/Emagister/collections/commit/4c5f3a98d80d092b93e249cc587a6a54b024a629))
+* **ci:** rename composer test script to tests ([b35c7a2](https://github.com/Emagister/collections/commit/b35c7a25964ccf4c26c7f5523bca459e5ba87df6))
+* **ci:** use composer scripts as single source of truth ([b043ef1](https://github.com/Emagister/collections/commit/b043ef1a4aac7311cef1e22b179dbac60a99309e))
+
+
+
 # Changelog
 
 ## v1.4.0
