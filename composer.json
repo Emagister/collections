@@ -31,7 +31,7 @@
         "lint": "find src tests -name '*.php' -exec php -l {} \\;",
         "test": "phpunit",
         "phpcs": "phpcs src tests",
-        "cs-fixer": "php-cs-fixer fix --dry-run --diff"
+        "cs-fixer": "php-cs-fixer fix --dry-run --diff --allow-risky=yes"
     },
     "version": "1.3.2"
 }

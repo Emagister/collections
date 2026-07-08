@@ -14,8 +14,9 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
+          tools: composer:v2
       - name: Run PHP lint
-        run: find src tests -name "*.php" -exec php -l {} \;
+        run: composer run lint
 
   tests:
     name: PHPUnit Tests
@@ -25,10 +26,11 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
+          tools: composer:v2
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
       - name: Run tests
-        run: vendor/bin/phpunit
+        run: composer run test
 
   code-sniffer:
     name: PHP CodeSniffer
@@ -38,10 +40,11 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
+          tools: composer:v2
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
       - name: Run CodeSniffer
-        run: vendor/bin/phpcs src tests
+        run: composer run phpcs
 
   cs-fixer:
     name: PHP CS Fixer
@@ -51,7 +54,8 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
+          tools: composer:v2
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
       - name: Run CS Fixer (dry-run)
-        run: vendor/bin/php-cs-fixer fix --dry-run --diff --allow-risky=yes
+        run: composer run cs-fixer
