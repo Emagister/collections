@@ -9,6 +9,7 @@ use Emagister\Collections\Sequence;
 
 /**
  * @template TValue
+ *
  * @extends Collection<TValue>
  */
 class HCollection extends Collection
@@ -31,6 +32,7 @@ class HCollection extends Collection
 
     /**
      * @param TValue $element
+     *
      * @throws CollectionException
      */
     public function add($element): void
@@ -47,17 +49,17 @@ class HCollection extends Collection
 
     /**
      * @param array<int, TValue> $elements
-     * @return HCollection<TValue>
+     *
      * @throws CollectionException
+     *
+     * @return HCollection<TValue>
      */
     protected function createSequence(array $elements): HCollection
     {
         return new static($this->type, $elements);
     }
 
-    /**
-     * @throws CollectionException
-     */
+    /** @throws CollectionException */
     protected function ensureSequencesAreCompatible(Sequence $sequence): void
     {
         parent::ensureSequencesAreCompatible($sequence);

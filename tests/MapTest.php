@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase as BaseTestCase;
 class MapTest extends BaseTestCase
 {
     #[Test]
-    public function it_should_return_true_if_at_least_one_element_matches_the_predicate()
+    public function it_should_return_true_if_at_least_one_element_matches_the_predicate(): void
     {
         $map = new Map([
             'one' => 1,
@@ -28,7 +28,7 @@ class MapTest extends BaseTestCase
     }
 
     #[Test]
-    public function it_should_return_true_if_more_than_one_elements_matches_the_predicate()
+    public function it_should_return_true_if_more_than_one_elements_matches_the_predicate(): void
     {
         $collection = new Map([
             'one' => 1,
@@ -47,7 +47,7 @@ class MapTest extends BaseTestCase
     }
 
     #[Test]
-    public function it_should_return_false_if_no_element_matches_the_predicate()
+    public function it_should_return_false_if_no_element_matches_the_predicate(): void
     {
         $collection = new Map([
             'one' => 1,
@@ -64,7 +64,7 @@ class MapTest extends BaseTestCase
     }
 
     #[Test]
-    public function is_should_partition_a_map()
+    public function is_should_partition_a_map(): void
     {
         $numbers = new Map([
             'one' => 1,
@@ -87,7 +87,7 @@ class MapTest extends BaseTestCase
     }
 
     #[Test]
-    public function it_should_part_a_map()
+    public function it_should_part_a_map(): void
     {
         $numbers = new Map([
             'one' => 1,
@@ -105,12 +105,12 @@ class MapTest extends BaseTestCase
         $this->assertInstanceOf(Map::class, $partition->head());
         $this->assertInstanceOf(Map::class, $partition->last());
 
-        $this->assertEquals(['two' => 2, 'four' =>  4, 'six' => 6], $partition->head()->toArray());
+        $this->assertEquals(['two' => 2, 'four' => 4, 'six' => 6], $partition->head()->toArray());
         $this->assertEquals(['one' => 1, 'three' => 3, 'five' => 5], $partition->last()->toArray());
     }
 
     #[Test]
-    public function it_should_calculate_the_difference_of_two_collections()
+    public function it_should_calculate_the_difference_of_two_collections(): void
     {
         $numbers = new Map([
             'one' => 1,
@@ -202,9 +202,9 @@ class MapTest extends BaseTestCase
         $this->assertEquals($integerIndexedMap->toArray(), $clonedIntegerIndexedMap->toArray());
     }
 
-
     /**
      * @test
+     *
      * @throws CollectionException
      */
     public function equals_method_should_return_true_for_maps_with_same_elements_in_different_order(): void
@@ -220,6 +220,7 @@ class MapTest extends BaseTestCase
 
     /**
      * @test
+     *
      * @throws CollectionException
      */
     public function equals_method_should_check_element_types(): void

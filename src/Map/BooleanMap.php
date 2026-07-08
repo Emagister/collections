@@ -4,7 +4,9 @@ namespace Emagister\Collections\Map;
 
 use Emagister\Collections\HomogeneityChecker;
 
-/** @extends HMap<bool> */
+/**
+ * @extends HMap<bool>
+ */
 final class BooleanMap extends HMap
 {
     public function __construct(array $elements = [])

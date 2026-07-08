@@ -6,6 +6,7 @@ use Closure;
 
 /**
  * @template TValue
+ *
  * @extends Sequence<string, TValue>
  */
 class Map extends Sequence
@@ -19,12 +20,7 @@ class Map extends Sequence
         parent::__construct($elements);
     }
 
-    /**
-     * @param array   $elements
-     * @param Closure $elementKeyClosure
-     *
-     * @return array<string, TValue>
-     */
+    /** @return array<string, TValue> */
     private function indexElementsUsingClosure(array $elements, Closure $elementKeyClosure): array
     {
         $keys = array_map(
@@ -37,19 +33,13 @@ class Map extends Sequence
         return array_combine($keys, $elements);
     }
 
-    /**
-     * @param string $key
-     * @param TValue $value
-     */
+    /** @param TValue $value */
     public function add(string $key, $value): void
     {
         $this->elements[$key] = $value;
     }
 
-    /**
-     * @param string $key
-     * @param TValue $value
-     */
+    /** @param TValue $value */
     public function prepend(string $key, $value): void
     {
         $currentElements = $this->elements;

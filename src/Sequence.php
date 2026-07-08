@@ -13,6 +13,7 @@ use Traversable;
 /**
  * @template TKey
  * @template TValue
+ *
  * @implements IteratorAggregate<TKey, TValue>
  */
 abstract class Sequence implements JsonSerializable, IteratorAggregate, Countable
@@ -225,6 +226,7 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
 
     /**
      * Returns the first element satisfying the callback.
+     *
      * @return TValue|null
      */
     final public function find(Closure $callback)
@@ -234,12 +236,11 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
                 return $element;
             }
         }
-
-        return null;
     }
 
     /**
      * Returns the first element not satisfying the callback.
+     *
      * @return TValue|null
      */
     final public function findNot(Closure $callback)
@@ -249,8 +250,6 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
                 return $element;
             }
         }
-
-        return null;
     }
 
     /** Modifies the current sequence removing the elements satisfying the callback. */
