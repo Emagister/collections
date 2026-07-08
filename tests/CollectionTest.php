@@ -128,15 +128,15 @@ class CollectionTest extends BaseTestCase
     #[Test]
     public function contains_method_should_use_value_equality_for_objects(): void
     {
-        $phpCourse = new stdClass();
-        $phpCourse->name = 'Advanced PHP';
+        $object = new stdClass();
+        $object->name = 'Advanced PHP';
 
-        $sameCourseDifferentInstance = clone $phpCourse;
+        $sameValueDifferentInstance = clone $object;
 
-        $collection = new Collection([$phpCourse]);
+        $collection = new Collection([$object]);
 
         $this->assertTrue(
-            $collection->contains($sameCourseDifferentInstance),
+            $collection->contains($sameValueDifferentInstance),
             'Collection should contain an object that is equal by value, even if it is a different instance.'
         );
     }
@@ -144,16 +144,16 @@ class CollectionTest extends BaseTestCase
     #[Test]
     public function contains_method_should_return_false_for_objects_with_different_property_values(): void
     {
-        $phpCourse = new stdClass();
-        $phpCourse->name = 'Advanced PHP';
+        $object = new stdClass();
+        $object->name = 'Advanced PHP';
 
-        $javascriptCourse = new stdClass();
-        $javascriptCourse->name = 'Advanced JavaScript';
+        $differentObject = new stdClass();
+        $differentObject->name = 'Advanced JavaScript';
 
-        $collection = new Collection([$phpCourse]);
+        $collection = new Collection([$object]);
 
         $this->assertFalse(
-            $collection->contains($javascriptCourse),
+            $collection->contains($differentObject),
             'Collection should not contain an object whose properties differ from any element.'
         );
     }
@@ -208,6 +208,56 @@ class CollectionTest extends BaseTestCase
         $collection->remove('1');
 
         $this->assertEquals([1], $collection->toArray());
+    }
+
+    #[Test]
+    public function remove_method_should_not_remove_anything_when_element_is_not_present(): void
+    {
+        $collection = new Collection([1, 2, 3]);
+
+        $removed = $collection->remove(4);
+
+        $this->assertFalse($removed, 'Removing an absent element should return false.');
+        $this->assertEquals([1, 2, 3], $collection->toArray());
+    }
+
+    #[Test]
+    public function remove_method_should_use_value_equality_for_objects(): void
+    {
+        $object = new stdClass();
+        $object->name = 'Advanced PHP';
+
+        $sameValueDifferentInstance = clone $object;
+
+        $collection = new Collection([$object]);
+
+        $removed = $collection->remove($sameValueDifferentInstance);
+
+        $this->assertTrue(
+            $removed,
+            'Collection should remove an object that is equal by value, even if it is a different instance.'
+        );
+        $this->assertTrue($collection->isEmpty());
+    }
+
+    #[Test]
+    public function remove_method_should_not_remove_objects_with_different_property_values(): void
+    {
+        $object = new stdClass();
+        $object->name = 'Advanced PHP';
+
+        $differentObject = new stdClass();
+        $differentObject->name = 'Advanced JavaScript';
+
+        $collection = new Collection([$object]);
+
+        $removed = $collection->remove($differentObject);
+
+        $this->assertFalse(
+            $removed,
+            'Collection should not remove an object whose properties differ from any element.'
+        );
+        $this->assertEquals([$object], $collection->toArray());
     }
 
     #[Test]
