@@ -104,6 +104,14 @@ class Map extends Sequence
         return array_map(fn($key) => (string) $key, array_keys($this->elements));
     }
 
+    public function sortWith(Comparator $comparator): static
+    {
+        $elements = $this->elements;
+        uasort($elements, [$comparator, 'compare']);
+
+        return $this->createSequence($elements);
+    }
+
     final public function usort(callable $callback): Map
     {
         $elements = $this->elements;

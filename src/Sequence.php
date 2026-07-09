@@ -89,6 +89,14 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
         return empty($this->elements);
     }
 
+    public function sortWith(Comparator $comparator): static
+    {
+        $elements = $this->elements;
+        usort($elements, [$comparator, 'compare']);
+
+        return $this->createSequence($elements);
+    }
+
     public function usort(callable $callback): Sequence
     {
         usort($this->elements, $callback);

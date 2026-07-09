@@ -4,6 +4,8 @@ namespace Emagister\Collections\Tests;
 
 use Emagister\Collections\Collection;
 use Emagister\Collections\CollectionException;
+use Emagister\Collections\Comparator;
+use Emagister\Collections\ComparatorBehavior;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use stdClass;
@@ -345,6 +347,84 @@ class CollectionTest extends BaseTestCase
             $collection1->equals($collection2),
             'Collections with same elements in different order should be equal.'
         );
+    }
+
+    #[Test]
+    public function sort_with_should_return_collection_sorted_in_ascending_order(): void
+    {
+        $comparator = new class () implements Comparator {
+            use ComparatorBehavior;
+
+            public function compare(mixed $a, mixed $b): int
+            {
+                return $a <=> $b;
+            }
+        };
+
+        $collection = new Collection([3, 1, 4, 1, 5, 9, 2, 6]);
+
+        $sorted = $collection->sortWith($comparator);
+
+        $this->assertEquals([1, 1, 2, 3, 4, 5, 6, 9], $sorted->toArray());
+    }
+
+    #[Test]
+    public function sort_with_should_return_collection_sorted_in_descending_order_via_reversed(): void
+    {
+        $comparator = new class () implements Comparator {
+            use ComparatorBehavior;
+
+            public function compare(mixed $a, mixed $b): int
+            {
+                return $a <=> $b;
+            }
+        };
+
+        $collection = new Collection([3, 1, 4, 1, 5, 9, 2, 6]);
+
+        $sorted = $collection->sortWith($comparator->reversed());
+
+        $this->assertEquals([9, 6, 5, 4, 3, 2, 1, 1], $sorted->toArray());
+    }
+
+    #[Test]
+    public function double_reversed_should_produce_same_order_as_original_comparator(): void
+    {
+        $comparator = new class () implements Comparator {
+            use ComparatorBehavior;
+
+            public function compare(mixed $a, mixed $b): int
+            {
+                return $a <=> $b;
+            }
+        };
+
+        $collection = new Collection([3, 1, 2]);
+
+        $this->assertEquals(
+            $collection->sortWith($comparator)->toArray(),
+            $collection->sortWith($comparator->reversed()->reversed())->toArray()
+        );
+    }
+
+    #[Test]
+    public function sort_with_should_not_modify_the_original_collection(): void
+    {
+        $comparator = new class () implements Comparator {
+            use ComparatorBehavior;
+
+            public function compare(mixed $a, mixed $b): int
+            {
+                return $a <=> $b;
+            }
+        };
+
+        $original = [3, 1, 2];
+        $collection = new Collection($original);
+
+        $collection->sortWith($comparator);
+
+        $this->assertEquals($original, $collection->toArray());
     }
 
     /** @throws CollectionException */

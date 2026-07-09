@@ -3,5 +3,5 @@
 .phpunit.result.cache
 .php-cs-fixer.cache
 .agents
-.claude
+.claude/
 skills-lock.json
