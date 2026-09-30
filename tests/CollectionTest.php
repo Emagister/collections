@@ -7,6 +7,7 @@ use Emagister\Collections\CollectionException;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use stdClass;
+use TypeError;
 
 class CollectionTest extends BaseTestCase
 {
@@ -358,5 +359,55 @@ class CollectionTest extends BaseTestCase
             $collection1->equals($collection2),
             'Collections with elements of different types should not be equal.'
         );
+    }
+
+    #[Test]
+    public function derived_collections_fail_explicitly_when_the_constructor_cannot_take_the_elements(): void
+    {
+        $collection = new class ('label') extends Collection {
+            public function __construct(string $label)
+            {
+                parent::__construct([$label]);
+            }
+        };
+
+        $this->expectException(CollectionException::class);
+        $this->expectExceptionMessage('if its constructor was redefined, override createSequence()');
+
+        $collection->slice(0);
+    }
+
+    #[Test]
+    public function derived_collections_work_when_the_redefined_constructor_can_take_the_elements(): void
+    {
+        $collection = new class ([1, 2, 3]) extends Collection {
+            public function __construct(iterable $elements = [], int ...$flags)
+            {
+                parent::__construct([...$elements]);
+            }
+        };
+
+        $sliced = $collection->slice(1);
+
+        $this->assertInstanceOf(get_class($collection), $sliced);
+        $this->assertSame([2, 3], $sliced->toArray());
+    }
+
+    #[Test]
+    public function the_error_raised_when_the_constructor_cannot_take_the_elements_is_kept_as_previous(): void
+    {
+        $collection = new class ('label') extends Collection {
+            public function __construct(string $label)
+            {
+                parent::__construct([$label]);
+            }
+        };
+
+        try {
+            $collection->slice(0);
+            $this->fail('A CollectionException was expected');
+        } catch (CollectionException $exception) {
+            $this->assertInstanceOf(TypeError::class, $exception->getPrevious());
+        }
     }
 }

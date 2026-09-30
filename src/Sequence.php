@@ -9,6 +9,7 @@ use Emagister\Collections\Map\HMap;
 use IteratorAggregate;
 use JsonSerializable;
 use Traversable;
+use TypeError;
 
 /**
  * @template TKey
@@ -31,9 +32,32 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
         $this->elements = $this->clone()->elements;
     }
 
-    protected function createSequence(array $elements): Sequence
+    /**
+     * Builds the sequence returned by derived-sequence methods such as `filter()` or `slice()`.
+     *
+     * Subclasses redefining the constructor with a different signature must override this method.
+     *
+     * @throws CollectionException
+     */
+    protected function createSequence(array $elements): static
     {
-        return new static($elements);
+        return $this->newInstance($elements);
+    }
+
+    /** @throws CollectionException */
+    final protected function newInstance(mixed ...$arguments): static
+    {
+        try {
+            return new static(...$arguments);
+        } catch (TypeError $error) {
+            throw new CollectionException(
+                sprintf(
+                    'Could not create a new %s; if its constructor was redefined, override createSequence()',
+                    static::class
+                ),
+                previous: $error
+            );
+        }
     }
 
     /** @return array<TKey, TValue> */
@@ -62,7 +86,7 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
     }
 
     /** @throws CollectionException */
-    final public function merge(Sequence $sequence): Sequence
+    final public function merge(Sequence $sequence): static
     {
         $this->ensureSequencesAreCompatible($sequence);
 
@@ -89,14 +113,16 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
         return empty($this->elements);
     }
 
-    public function usort(callable $callback): Sequence
+    /** @throws CollectionException */
+    public function usort(callable $callback): static
     {
         usort($this->elements, $callback);
 
         return $this->createSequence($this->elements);
     }
 
-    final public function filter(Closure $callback): Sequence
+    /** @throws CollectionException */
+    final public function filter(Closure $callback): static
     {
         return $this->createSequence(
             array_filter($this->elements, $callback, ARRAY_FILTER_USE_BOTH)
@@ -155,7 +181,7 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
     }
 
     /** @throws CollectionException */
-    final public function diff(Sequence $sequence): Sequence
+    final public function diff(Sequence $sequence): static
     {
         $this->ensureSequencesAreCompatible($sequence);
 
@@ -167,7 +193,7 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
     }
 
     /** @throws CollectionException */
-    final public function diffWithClosure(Sequence $sequence, Closure $callback): Sequence
+    final public function diffWithClosure(Sequence $sequence, Closure $callback): static
     {
         $this->ensureSequencesAreCompatible($sequence);
 
@@ -179,7 +205,7 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
     }
 
     /** @throws CollectionException */
-    final public function intersectWithClosure(Sequence $sequence, Closure $callback): Sequence
+    final public function intersectWithClosure(Sequence $sequence, Closure $callback): static
     {
         $this->ensureSequencesAreCompatible($sequence);
 
@@ -221,7 +247,8 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
         return current(array_slice($this->elements, -1));
     }
 
-    final public function tail(): Sequence
+    /** @throws CollectionException */
+    final public function tail(): static
     {
         return $this->createSequence(
             array_slice($this->elements, 1)
@@ -290,7 +317,8 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
         return is_null($this->findNot($callback));
     }
 
-    final public function slice(int $offset, ?int $length = null): Sequence
+    /** @throws CollectionException */
+    final public function slice(int $offset, ?int $length = null): static
     {
         return $this->createSequence(
             array_slice($this->elements, $offset, $length, true)
@@ -312,13 +340,15 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
         return $result;
     }
 
-    final public function clone(): Sequence
+    /** @throws CollectionException */
+    final public function clone(): static
     {
         $clonedElements = array_map(fn($element) => is_object($element) ? clone $element : $element, $this->elements);
 
         return $this->createSequence($clonedElements);
     }
 
+    /** @throws CollectionException */
     final public function groupBy(Closure $discriminatorCallback): HMap
     {
         $result = new HMap(static::class);

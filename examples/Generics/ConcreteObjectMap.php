@@ -3,10 +3,10 @@
 namespace Emagister\Collections\Examples\Generics;
 
 use Closure;
-use Emagister\Collections\Map\HMap;
+use Emagister\Collections\Map\SpecificMap;
 
-/** @extends HMap<ConcreteObject> */
-final class ConcreteObjectMap extends HMap
+/** @extends SpecificMap<ConcreteObject> */
+final class ConcreteObjectMap extends SpecificMap
 {
     public function __construct(array $elements = [], ?Closure $elementKeyClosure = null)
     {

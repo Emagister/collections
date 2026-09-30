@@ -2,10 +2,10 @@
 
 namespace Emagister\Collections\Examples\Generics;
 
-use Emagister\Collections\Collection\HCollection;
+use Emagister\Collections\Collection\SpecificCollection;
 
-/** @extends HCollection<ConcreteObject> */
-final class ConcreteObjectCollection extends HCollection
+/** @extends SpecificCollection<ConcreteObject> */
+final class ConcreteObjectCollection extends SpecificCollection
 {
     public function __construct(array $elements = [])
     {

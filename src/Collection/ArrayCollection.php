@@ -5,17 +5,12 @@ namespace Emagister\Collections\Collection;
 use Emagister\Collections\HomogeneityChecker;
 
 /**
- * @extends HCollection<array>
+ * @extends SpecificCollection<array>
  */
-final class ArrayCollection extends HCollection
+final class ArrayCollection extends SpecificCollection
 {
     public function __construct(array $elements = [])
     {
         parent::__construct(HomogeneityChecker::TYPE_ARRAY, $elements);
-    }
-
-    protected function createSequence(array $elements): ArrayCollection
-    {
-        return new ArrayCollection($elements);
     }
 }
