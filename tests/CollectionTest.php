@@ -475,4 +475,264 @@ class CollectionTest extends BaseTestCase
         $this->assertSame([1, 2, 3], $sorted->toArray());
         $this->assertSame([3, 1, 2], $collection->toArray());
     }
+
+    #[Test]
+    public function add_method_should_append_the_element(): void
+    {
+        $collection = new Collection([1]);
+
+        $collection->add(2);
+
+        $this->assertSame([1, 2], $collection->toArray());
+    }
+
+    #[Test]
+    public function remove_method_should_reset_the_element_keys(): void
+    {
+        $collection = new Collection(['a', 'b', 'c']);
+
+        $collection->remove('a');
+
+        $this->assertSame(['b', 'c'], $collection->toArray());
+    }
+
+    #[Test]
+    public function each_method_should_call_the_callback_for_every_element(): void
+    {
+        $collection = new Collection([1, 2, 3]);
+        $visitedElements = [];
+
+        $collection->each(function ($element) use (&$visitedElements): void {
+            $visitedElements[] = $element;
+        });
+
+        $this->assertSame([1, 2, 3], $visitedElements);
+    }
+
+    #[Test]
+    public function contains_method_should_not_loosely_compare_an_object_with_a_scalar(): void
+    {
+        $stringable = new class () {
+            public function __toString(): string
+            {
+                return 'a';
+            }
+        };
+
+        $collection = new Collection([$stringable]);
+
+        $this->assertFalse($collection->contains('a'));
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function contains_with_closure_method_should_use_the_callback_to_compare_elements(): void
+    {
+        $collection = new Collection([1, 2, 3]);
+        $sameNumber = fn($element, $sequenceElement) => $element === $sequenceElement;
+
+        $this->assertTrue($collection->containsWithClosure(2, $sameNumber));
+        $this->assertFalse($collection->containsWithClosure(4, $sameNumber));
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function equals_method_should_return_false_for_collections_with_a_different_number_of_elements(): void
+    {
+        $collection = new Collection([1, 2]);
+
+        $this->assertFalse($collection->equals(new Collection([1, 2, 3])));
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function equals_with_closure_method_should_use_the_callback_to_compare_elements(): void
+    {
+        $collection = new Collection([1, 2]);
+        $sameNumber = fn($element, $sequenceElement) => $element == $sequenceElement;
+
+        $this->assertTrue($collection->equalsWithClosure(new Collection(['2', '1']), $sameNumber));
+        $this->assertFalse($collection->equalsWithClosure(new Collection([1, 3]), $sameNumber));
+        $this->assertFalse($collection->equalsWithClosure(new Collection([1, 2, 2]), $sameNumber));
+    }
+
+    #[Test]
+    public function diff_method_should_fail_with_a_collection_of_another_class(): void
+    {
+        $collection = new Collection(['a']);
+
+        $this->expectException(CollectionException::class);
+        $this->expectExceptionMessage('Sequences types are not compatible');
+
+        $collection->diff(new StringCollection(['b']));
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function diff_with_closure_method_should_keep_the_elements_not_present_in_the_other_collection(): void
+    {
+        $collection = new Collection([1, 2, 3]);
+
+        $diff = $collection->diffWithClosure(new Collection([2]), fn($a, $b) => $a === $b);
+
+        $this->assertSame([1, 3], $diff->toArray());
+    }
+
+    #[Test]
+    public function diff_with_closure_method_should_fail_with_a_collection_of_another_class(): void
+    {
+        $collection = new Collection(['a']);
+
+        $this->expectException(CollectionException::class);
+
+        $collection->diffWithClosure(new StringCollection(['b']), fn($a, $b) => $a === $b);
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function intersect_with_closure_method_should_keep_the_elements_present_in_the_other_collection(): void
+    {
+        $collection = new Collection([1, 2, 3]);
+
+        $intersection = $collection->intersectWithClosure(new Collection([2, 4]), fn($a, $b) => $a === $b);
+
+        $this->assertSame([2], $intersection->toArray());
+    }
+
+    #[Test]
+    public function intersect_with_closure_method_should_fail_with_a_collection_of_another_class(): void
+    {
+        $collection = new Collection(['a']);
+
+        $this->expectException(CollectionException::class);
+
+        $collection->intersectWithClosure(new StringCollection(['a']), fn($a, $b) => $a === $b);
+    }
+
+    #[Test]
+    public function map_method_should_return_a_collection_with_the_transformed_elements(): void
+    {
+        $collection = new Collection([1, 2, 3]);
+
+        $doubled = $collection->map(fn($number) => $number * 2);
+
+        $this->assertInstanceOf(Collection::class, $doubled);
+        $this->assertSame([2, 4, 6], $doubled->toArray());
+    }
+
+    #[Test]
+    public function find_method_should_return_the_first_element_satisfying_the_callback(): void
+    {
+        $collection = new Collection([1, 2, 3, 4]);
+
+        $this->assertSame(2, $collection->find(fn($number) => $number % 2 === 0));
+        $this->assertNull($collection->find(fn($number) => $number > 4));
+    }
+
+    #[Test]
+    public function find_not_method_should_return_the_first_element_not_satisfying_the_callback(): void
+    {
+        $collection = new Collection([2, 4, 5, 7]);
+
+        $this->assertSame(5, $collection->findNot(fn($number) => $number % 2 === 0));
+        $this->assertNull($collection->findNot(fn($number) => $number > 0));
+    }
+
+    #[Test]
+    public function for_all_method_should_check_that_every_element_satisfies_the_callback(): void
+    {
+        $collection = new Collection([2, 4, 6]);
+
+        $this->assertTrue($collection->forAll(fn($number) => $number % 2 === 0));
+        $this->assertFalse($collection->forAll(fn($number) => $number < 6));
+    }
+
+    #[Test]
+    public function remove_with_closure_method_should_remove_the_elements_satisfying_the_callback(): void
+    {
+        $collection = new Collection([1, 2, 3, 4]);
+
+        $collection->removeWithClosure(fn($number) => $number % 2 === 0);
+
+        $this->assertSame([1, 3], array_values($collection->toArray()));
+    }
+
+    #[Test]
+    public function count_with_closure_method_should_count_the_elements_satisfying_the_callback(): void
+    {
+        $collection = new Collection([1, 2, 3, 4, 6]);
+
+        $this->assertSame(3, $collection->countWithClosure(fn($number) => $number % 2 === 0));
+    }
+
+    #[Test]
+    public function split_method_should_return_a_collection_of_chunks_of_the_given_length(): void
+    {
+        $collection = new Collection([1, 2, 3, 4, 5]);
+
+        $chunks = $collection->split(2);
+
+        $this->assertContainsOnlyInstancesOf(Collection::class, $chunks);
+        $this->assertSame(
+            [[1, 2], [3, 4], [5]],
+            $chunks->map(fn(Collection $chunk) => $chunk->toArray())->toArray()
+        );
+    }
+
+    #[Test]
+    public function random_element_method_should_return_an_element_of_the_collection(): void
+    {
+        $this->assertSame('a', (new Collection(['a']))->randomElement());
+        $this->assertContains((new Collection([1, 2, 3]))->randomElement(), [1, 2, 3]);
+    }
+
+    #[Test]
+    public function shuffle_method_should_change_the_order_but_keep_the_elements(): void
+    {
+        $elements = range(1, 20);
+        $collection = new Collection($elements);
+
+        $collection->shuffle();
+
+        $this->assertNotSame($elements, $collection->toArray());
+        $this->assertEqualsCanonicalizing($elements, $collection->toArray());
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function subclasses_can_override_create_sequence_and_delegate_to_the_parent(): void
+    {
+        $collection = new class ([1, 2, 3]) extends Collection {
+            public int $createdSequences = 0;
+
+            protected function createSequence(array $elements): static
+            {
+                $this->createdSequences++;
+
+                return parent::createSequence($elements);
+            }
+        };
+
+        $filtered = $collection->filter(fn($number) => $number > 1);
+
+        $this->assertSame(1, $collection->createdSequences);
+        $this->assertInstanceOf(get_class($collection), $filtered);
+        $this->assertSame([2, 3], $filtered->toArray());
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function subclasses_can_override_merge_elements_and_delegate_to_the_parent(): void
+    {
+        $collection = new class ([1, 2]) extends Collection {
+            protected function mergeElements(array $elements, array $otherElements): array
+            {
+                return array_unique(parent::mergeElements($elements, $otherElements));
+            }
+        };
+
+        $merged = $collection->merge(new (get_class($collection))([2, 3]));
+
+        $this->assertSame([1, 2, 3], $merged->toArray());
+    }
 }
