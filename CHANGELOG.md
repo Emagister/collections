@@ -1,3 +1,52 @@
+## v2.0.0
+
+## [2.0.0](https://github.com/Emagister/collections/compare/v1.5.1...v2.0.0) (2026-10-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* Sequence::createSequence(), Sequence::usort() and
+StringMap::sortAlphabetically() now return `static`; subclasses
+overriding them must declare `: static` or PHP refuses to load them.
+Sequence now defines `final protected newInstance()`, so subclasses
+defining a method with that name must rename it. When createSequence()
+cannot call a redefined constructor, derived-sequence methods throw a
+CollectionException (with the original TypeError as previous) instead of
+a TypeError. SpecificCollection now extends HCollection and no longer
+uses the `$classType` property: pass the type to the parent constructor;
+wrong element types throw HomogeneityException instead of
+InvalidArgumentException. See UPGRADE.md.
+* code relying on the in-place sort must use the returned
+collection. See UPGRADE.md.
+* merge() no longer modifies the sequence it is called
+on; use its return value. Collection::join() has been removed; use
+merge(), or `new Collection([...$a, ...$b])` to combine collections of
+different types. See UPGRADE.md.
+* merging maps keeps numeric keys and overwrites
+duplicates instead of renumbering them. Sequence defines a new
+protected mergeElements() method, final in Map; subclasses defining a
+method with that name must rename it. See UPGRADE.md.
+
+### Features
+
+* return a new sequence from merge() and remove Collection::join() ([5e305d5](https://github.com/Emagister/collections/commit/5e305d5954634684b16b836d0af08220736c7395))
+* return static from sequence-producing methods ([df202e2](https://github.com/Emagister/collections/commit/df202e2e351f20baf186edb7f37fac2e77a67cea))
+
+
+### Bug Fixes
+
+* allow cloning sequences of enum cases ([92c18bb](https://github.com/Emagister/collections/commit/92c18bbe00b53b864badf1680e96502b2970d7a7))
+* include the original TypeError message when a sequence cannot be created ([22cd9de](https://github.com/Emagister/collections/commit/22cd9dece3ffd682ac730bee4ede272e0808aa64))
+* keep numeric keys when merging maps ([1d2a272](https://github.com/Emagister/collections/commit/1d2a272fc266234f3b0e5e7cce25655b459f3e54))
+* stop Collection::usort() from sorting the original collection ([57113aa](https://github.com/Emagister/collections/commit/57113aac71e85312ef45fe155737d4942a8f8c28))
+
+
+### Documentation
+
+* clarify which constructor signatures work without overriding createSequence() ([134bf19](https://github.com/Emagister/collections/commit/134bf191309f86347ec8049839c9b988ebc5f02b))
+
+
+
 ## v1.5.1
 
 ### [1.5.1](https://github.com/Emagister/collections/compare/v1.5.0...v1.5.1) (2026-07-08)
