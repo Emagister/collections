@@ -116,9 +116,11 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
     /** @throws CollectionException */
     public function usort(callable $callback): static
     {
-        usort($this->elements, $callback);
+        $elements = $this->elements;
 
-        return $this->createSequence($this->elements);
+        usort($elements, $callback);
+
+        return $this->createSequence($elements);
     }
 
     /** @throws CollectionException */

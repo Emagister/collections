@@ -410,4 +410,16 @@ class CollectionTest extends BaseTestCase
             $this->assertInstanceOf(TypeError::class, $exception->getPrevious());
         }
     }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function usort_method_should_not_modify_the_original_collection(): void
+    {
+        $collection = new Collection([3, 1, 2]);
+
+        $sorted = $collection->usort(fn($a, $b) => $a <=> $b);
+
+        $this->assertSame([1, 2, 3], $sorted->toArray());
+        $this->assertSame([3, 1, 2], $collection->toArray());
+    }
 }

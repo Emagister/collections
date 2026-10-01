@@ -36,6 +36,20 @@ protected function createSequence(array $elements): static
 If the constructor takes only the elements, you can drop the override instead and extend `SpecificCollection` or
 `SpecificMap`, which build new instances with `new static($elements)`.
 
+### `Collection::usort()` no longer sorts the original collection
+
+`usort()` on a collection used to sort the collection it was called on, besides returning a new sorted one. It now
+leaves the original collection untouched, as `Map::usort()` already did. If you relied on the in-place sort, use the
+returned collection:
+
+```php
+// Before
+$collection->usort($callback);
+
+// After
+$collection = $collection->usort($callback);
+```
+
 ### `newInstance()` is now a final method of `Sequence`
 
 `Sequence` defines `final protected function newInstance(mixed ...$arguments): static`. A subclass defining its own
