@@ -188,4 +188,16 @@ class HCollectionTest extends BaseTestCase
         $this->assertInstanceOf(StringCollection::class, $groups->get('b'));
         $this->assertSame(['banana'], $groups->get('b')->toArray());
     }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function merge_method_should_fail_with_a_collection_of_another_type(): void
+    {
+        $collection = new HCollection(HomogeneityChecker::TYPE_STRING, ['a']);
+        $otherCollection = new HCollection(HomogeneityChecker::TYPE_NUMERIC, [1]);
+
+        $this->expectException(HomogeneityException::class);
+
+        $collection->merge($otherCollection);
+    }
 }

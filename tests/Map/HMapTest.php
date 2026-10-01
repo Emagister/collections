@@ -133,4 +133,29 @@ class HMapTest extends BaseTestCase
 
         $filtered->add('c', new stdClass());
     }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function merge_method_should_keep_the_class_and_numeric_keys_of_a_typed_map(): void
+    {
+        $map = new StringMap(['10' => 'alpha', 'x' => 'beta']);
+        $otherMap = new StringMap(['20' => 'gamma', '10' => 'delta']);
+
+        $mergedMap = $map->merge($otherMap);
+
+        $this->assertInstanceOf(StringMap::class, $mergedMap);
+        $this->assertSame([10 => 'delta', 'x' => 'beta', 20 => 'gamma'], $mergedMap->toArray());
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function merge_method_should_fail_with_a_map_of_another_type(): void
+    {
+        $map = new HMap(HomogeneityChecker::TYPE_STRING, ['a' => 'alpha']);
+        $otherMap = new HMap(HomogeneityChecker::TYPE_NUMERIC, ['b' => 1]);
+
+        $this->expectException(HomogeneityException::class);
+
+        $map->merge($otherMap);
+    }
 }

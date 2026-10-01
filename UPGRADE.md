@@ -67,6 +67,21 @@ $collection->merge($otherCollection);
 $collection = $collection->merge($otherCollection);
 ```
 
+When merging maps, numeric keys are now kept, and the values of the given map overwrite the ones with the same key,
+as it already happened with non-numeric keys. They used to be renumbered from 0, so no value was overwritten:
+
+```php
+$map = new Map(['10' => 'a']);
+
+// Before: [0 => 'a', 1 => 'b']
+// After: [10 => 'b']
+$map->merge(new Map(['10' => 'b']));
+```
+
+`Sequence` defines a new `protected function mergeElements(array $elements, array $otherElements): array` method,
+which is final in `Map`. A map defining its own `mergeElements()` method, or a collection defining it with an
+incompatible signature, no longer loads. Rename that method.
+
 ### `Collection::join()` has been removed
 
 Use `merge()` instead, which keeps the class of the collection and checks that both collections are compatible. To

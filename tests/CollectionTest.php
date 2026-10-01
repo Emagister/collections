@@ -3,6 +3,7 @@
 namespace Emagister\Collections\Tests;
 
 use Emagister\Collections\Collection;
+use Emagister\Collections\Collection\StringCollection;
 use Emagister\Collections\CollectionException;
 use Emagister\Collections\Tests\Fixtures\SampleEnum;
 use PHPUnit\Framework\Attributes\Test;
@@ -82,6 +83,29 @@ class CollectionTest extends BaseTestCase
         $mergedCollection = $collection->merge($otherCollection);
 
         $this->assertSame(['a', 'b', 'c', 'd', 'e', 'f'], $mergedCollection->toArray());
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function merge_method_should_append_the_elements_of_an_empty_or_non_empty_collection(): void
+    {
+        $collection = new Collection(['a', 'b']);
+        $emptyCollection = new Collection();
+
+        $this->assertSame(['a', 'b'], $collection->merge($emptyCollection)->toArray());
+        $this->assertSame(['a', 'b'], $emptyCollection->merge($collection)->toArray());
+        $this->assertSame(['a', 'b', 'a', 'b'], $collection->merge($collection)->toArray());
+    }
+
+    #[Test]
+    public function merge_method_should_fail_with_a_collection_of_another_class(): void
+    {
+        $collection = new Collection(['a']);
+
+        $this->expectException(CollectionException::class);
+        $this->expectExceptionMessage('Sequences types are not compatible');
+
+        $collection->merge(new StringCollection(['b']));
     }
 
     /** @throws CollectionException */

@@ -93,8 +93,21 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
         $this->ensureSequencesAreCompatible($sequence);
 
         return $this->createSequence(
-            array_merge($this->elements, $sequence->toArray())
+            $this->mergeElements($this->elements, $sequence->toArray())
         );
+    }
+
+    /**
+     * Combines the elements of two sequences for `merge()`. By default, the elements are appended.
+     *
+     * @param array<TKey, TValue> $elements
+     * @param array<TKey, TValue> $otherElements
+     *
+     * @return array<TKey, TValue>
+     */
+    protected function mergeElements(array $elements, array $otherElements): array
+    {
+        return array_merge($elements, $otherElements);
     }
 
     /** @throws CollectionException */
