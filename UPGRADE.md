@@ -5,7 +5,9 @@ From 1.x to 2.0
 ---------------
 
 Methods returning a new sequence now declare a `static` return type, so they return the class you called them on
-instead of `Sequence`, `Collection` or `Map`. Code calling these methods keeps working. Only subclasses may need changes.
+instead of `Sequence`, `Collection` or `Map`. Code calling these methods keeps working, except for `usort()` and
+`merge()`, which no longer modify the original sequence, and the removed `Collection::join()`. Otherwise, only
+subclasses may need changes.
 
 ### Overrides of `createSequence()`, `usort()` or `sortAlphabetically()` must return `static`
 
@@ -48,6 +50,36 @@ $collection->usort($callback);
 
 // After
 $collection = $collection->usort($callback);
+```
+
+### `merge()` no longer modifies the original sequence
+
+`merge()` used to add the elements of the given sequence to the sequence it was called on, and return that same
+sequence. It now returns a new sequence of the same class, and leaves both sequences untouched. If you relied on the
+in-place merge, use the returned sequence:
+
+```php
+// Before
+$collection->merge($otherCollection);
+
+// After
+$collection = $collection->merge($otherCollection);
+```
+
+### `Collection::join()` has been removed
+
+Use `merge()` instead, which keeps the class of the collection and checks that both collections are compatible. To
+combine collections of different types into a plain `Collection`, as `join()` did, build it from their elements:
+
+```php
+// Before
+$joined = $collection->join($otherCollection);
+
+// After, for collections of the same class
+$joined = $collection->merge($otherCollection);
+
+// After, for collections of different classes
+$joined = new Collection([...$collection, ...$otherCollection]);
 ```
 
 ### `newInstance()` is now a final method of `Sequence`

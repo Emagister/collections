@@ -100,6 +100,19 @@ class HCollectionTest extends BaseTestCase
 
         $this->assertInstanceOf(StringCollection::class, $collection->slice(1));
         $this->assertInstanceOf(StringCollection::class, $collection->usort(fn($a, $b) => strcmp($b, $a)));
+        $this->assertInstanceOf(StringCollection::class, $collection->merge(new StringCollection(['d'])));
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function merge_method_should_not_modify_the_original_typed_collection(): void
+    {
+        $collection = new StringCollection(['a', 'b']);
+
+        $merged = $collection->merge(new StringCollection(['c']));
+
+        $this->assertSame(['a', 'b', 'c'], $merged->toArray());
+        $this->assertSame(['a', 'b'], $collection->toArray());
     }
 
     #[Test]

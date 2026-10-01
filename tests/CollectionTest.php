@@ -71,24 +71,30 @@ class CollectionTest extends BaseTestCase
         $this->assertNotNull($evenNumbers->head());
     }
 
+    /** @throws CollectionException */
     #[Test]
-    public function join_method_should_work_properly(): void
+    public function merge_method_should_return_a_collection_with_the_elements_of_both_collections(): void
     {
         $collection = new Collection(['a', 'b', 'c']);
         $otherCollection = new Collection(['d', 'e', 'f']);
 
-        $joinedCollection = $collection->join($otherCollection);
+        $mergedCollection = $collection->merge($otherCollection);
 
-        $this->assertEquals(
-            6,
-            $joinedCollection->count(),
-            sprintf('Joined collection should have 6 elements and has %s elements.', $joinedCollection->count())
-        );
-        $this->assertSame(
-            ['a', 'b', 'c', 'd', 'e', 'f'],
-            $joinedCollection->toArray(),
-            'Joined collection elements should match the original collections.'
-        );
+        $this->assertSame(['a', 'b', 'c', 'd', 'e', 'f'], $mergedCollection->toArray());
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function merge_method_should_not_modify_the_original_collections(): void
+    {
+        $collection = new Collection(['a', 'b', 'c']);
+        $otherCollection = new Collection(['d', 'e', 'f']);
+
+        $mergedCollection = $collection->merge($otherCollection);
+
+        $this->assertNotSame($collection, $mergedCollection);
+        $this->assertSame(['a', 'b', 'c'], $collection->toArray());
+        $this->assertSame(['d', 'e', 'f'], $otherCollection->toArray());
     }
 
     /** @throws CollectionException */

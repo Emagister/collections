@@ -90,9 +90,9 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
     {
         $this->ensureSequencesAreCompatible($sequence);
 
-        $this->elements = array_merge($this->elements, $sequence->toArray());
-
-        return $this;
+        return $this->createSequence(
+            array_merge($this->elements, $sequence->toArray())
+        );
     }
 
     /** @throws CollectionException */

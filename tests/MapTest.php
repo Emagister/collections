@@ -233,4 +233,30 @@ class MapTest extends BaseTestCase
             'Collections with elements of different types should not be equal.'
         );
     }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function merge_method_should_return_a_map_with_the_elements_of_both_maps(): void
+    {
+        $map = new Map(['one' => 1, 'two' => 2]);
+        $otherMap = new Map(['two' => 22, 'three' => 3]);
+
+        $mergedMap = $map->merge($otherMap);
+
+        $this->assertSame(['one' => 1, 'two' => 22, 'three' => 3], $mergedMap->toArray());
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function merge_method_should_not_modify_the_original_maps(): void
+    {
+        $map = new Map(['one' => 1, 'two' => 2]);
+        $otherMap = new Map(['two' => 22, 'three' => 3]);
+
+        $mergedMap = $map->merge($otherMap);
+
+        $this->assertNotSame($map, $mergedMap);
+        $this->assertSame(['one' => 1, 'two' => 2], $map->toArray());
+        $this->assertSame(['two' => 22, 'three' => 3], $otherMap->toArray());
+    }
 }
