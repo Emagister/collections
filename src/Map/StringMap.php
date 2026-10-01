@@ -2,12 +2,13 @@
 
 namespace Emagister\Collections\Map;
 
+use Emagister\Collections\CollectionException;
 use Emagister\Collections\HomogeneityChecker;
 
 /**
- * @extends HMap<string>
+ * @extends SpecificMap<string>
  */
-class StringMap extends HMap
+class StringMap extends SpecificMap
 {
     public const ORDER_ASC = 'ASC';
     public const ORDER_DESC = 'DESC';
@@ -17,15 +18,10 @@ class StringMap extends HMap
         parent::__construct(HomogeneityChecker::TYPE_STRING, $elements);
     }
 
-    protected function createSequence(array $elements): StringMap
+    /** @throws CollectionException */
+    public function sortAlphabetically(string $order = self::ORDER_ASC): static
     {
-        return new StringMap($elements);
-    }
-
-    public function sortAlphabetically(string $order = self::ORDER_ASC): StringMap
-    {
-        /** @var StringMap $sortedMap */
-        $sortedMap = $this->usort(function (string $a, string $b) use ($order) {
+        return $this->usort(function (string $a, string $b) use ($order) {
             $comparison = strcmp(
                 iconv('UTF-8', 'ASCII//TRANSLIT', $a),
                 iconv('UTF-8', 'ASCII//TRANSLIT', $b)
@@ -33,7 +29,5 @@ class StringMap extends HMap
 
             return $comparison * ($order == self::ORDER_ASC ? 1 : -1);
         });
-
-        return $sortedMap;
     }
 }

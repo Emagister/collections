@@ -5,17 +5,12 @@ namespace Emagister\Collections\Map;
 use Emagister\Collections\HomogeneityChecker;
 
 /**
- * @extends HMap<numeric>
+ * @extends SpecificMap<numeric>
  */
-final class NumericMap extends HMap
+final class NumericMap extends SpecificMap
 {
     public function __construct(array $elements = [])
     {
         parent::__construct(HomogeneityChecker::TYPE_NUMERIC, $elements);
-    }
-
-    protected function createSequence(array $elements): NumericMap
-    {
-        return new NumericMap($elements);
     }
 }

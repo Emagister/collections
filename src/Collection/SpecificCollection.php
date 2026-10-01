@@ -2,37 +2,18 @@
 
 namespace Emagister\Collections\Collection;
 
-use Emagister\Collections\Collection;
-use InvalidArgumentException;
-
 /**
+ * Base class for typed collections whose constructor takes the elements as its first parameter,
+ * and no other required parameters.
+ *
  * @template TValue
  *
- * @extends Collection<TValue>
+ * @extends HCollection<TValue>
  */
-abstract class SpecificCollection extends Collection
+abstract class SpecificCollection extends HCollection
 {
-    /** @var class-string<TValue> */
-    protected string $classType;
-
-    public function __construct(array $elements = [])
+    protected function createSequence(array $elements): static
     {
-        $this->guardElementsAreSpecificClassType($elements);
-
-        parent::__construct($elements);
-    }
-
-    private function guardElementsAreSpecificClassType(array $elements): void
-    {
-        foreach ($elements as $element) {
-            $this->guardElementIsSpecificClassType($element);
-        }
-    }
-
-    private function guardElementIsSpecificClassType($element): void
-    {
-        if (!($element instanceof $this->classType)) {
-            throw new InvalidArgumentException();
-        }
+        return $this->newInstance($elements);
     }
 }

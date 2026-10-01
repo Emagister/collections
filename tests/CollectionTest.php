@@ -3,10 +3,13 @@
 namespace Emagister\Collections\Tests;
 
 use Emagister\Collections\Collection;
+use Emagister\Collections\Collection\StringCollection;
 use Emagister\Collections\CollectionException;
+use Emagister\Collections\Tests\Fixtures\SampleEnum;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use stdClass;
+use TypeError;
 
 class CollectionTest extends BaseTestCase
 {
@@ -70,24 +73,53 @@ class CollectionTest extends BaseTestCase
         $this->assertNotNull($evenNumbers->head());
     }
 
+    /** @throws CollectionException */
     #[Test]
-    public function join_method_should_work_properly(): void
+    public function merge_method_should_return_a_collection_with_the_elements_of_both_collections(): void
     {
         $collection = new Collection(['a', 'b', 'c']);
         $otherCollection = new Collection(['d', 'e', 'f']);
 
-        $joinedCollection = $collection->join($otherCollection);
+        $mergedCollection = $collection->merge($otherCollection);
 
-        $this->assertEquals(
-            6,
-            $joinedCollection->count(),
-            sprintf('Joined collection should have 6 elements and has %s elements.', $joinedCollection->count())
-        );
-        $this->assertSame(
-            ['a', 'b', 'c', 'd', 'e', 'f'],
-            $joinedCollection->toArray(),
-            'Joined collection elements should match the original collections.'
-        );
+        $this->assertSame(['a', 'b', 'c', 'd', 'e', 'f'], $mergedCollection->toArray());
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function merge_method_should_append_the_elements_of_an_empty_or_non_empty_collection(): void
+    {
+        $collection = new Collection(['a', 'b']);
+        $emptyCollection = new Collection();
+
+        $this->assertSame(['a', 'b'], $collection->merge($emptyCollection)->toArray());
+        $this->assertSame(['a', 'b'], $emptyCollection->merge($collection)->toArray());
+        $this->assertSame(['a', 'b', 'a', 'b'], $collection->merge($collection)->toArray());
+    }
+
+    #[Test]
+    public function merge_method_should_fail_with_a_collection_of_another_class(): void
+    {
+        $collection = new Collection(['a']);
+
+        $this->expectException(CollectionException::class);
+        $this->expectExceptionMessage('Sequences types are not compatible');
+
+        $collection->merge(new StringCollection(['b']));
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function merge_method_should_not_modify_the_original_collections(): void
+    {
+        $collection = new Collection(['a', 'b', 'c']);
+        $otherCollection = new Collection(['d', 'e', 'f']);
+
+        $mergedCollection = $collection->merge($otherCollection);
+
+        $this->assertNotSame($collection, $mergedCollection);
+        $this->assertSame(['a', 'b', 'c'], $collection->toArray());
+        $this->assertSame(['d', 'e', 'f'], $otherCollection->toArray());
     }
 
     /** @throws CollectionException */
@@ -286,6 +318,28 @@ class CollectionTest extends BaseTestCase
         $this->assertEquals([1, 2, 3, 4, 5], $iteratedElements);
     }
 
+    /** @throws CollectionException */
+    #[Test]
+    public function clone_method_should_keep_the_same_enum_cases(): void
+    {
+        $collection = new Collection([SampleEnum::First, SampleEnum::Second]);
+
+        $clonedCollection = $collection->clone();
+
+        $this->assertNotSame($collection, $clonedCollection);
+        $this->assertSame([SampleEnum::First, SampleEnum::Second], $clonedCollection->toArray());
+    }
+
+    #[Test]
+    public function cloning_a_collection_of_enum_cases_should_keep_the_same_enum_cases(): void
+    {
+        $collection = new Collection([SampleEnum::First, SampleEnum::Second]);
+
+        $clonedCollection = clone $collection;
+
+        $this->assertSame([SampleEnum::First, SampleEnum::Second], $clonedCollection->toArray());
+    }
+
     #[Test]
     public function it_should_perform_a_deep_clone_when_cloning_the_collection(): void
     {
@@ -358,5 +412,67 @@ class CollectionTest extends BaseTestCase
             $collection1->equals($collection2),
             'Collections with elements of different types should not be equal.'
         );
+    }
+
+    #[Test]
+    public function derived_collections_fail_explicitly_when_the_constructor_cannot_take_the_elements(): void
+    {
+        $collection = new class ('label') extends Collection {
+            public function __construct(string $label)
+            {
+                parent::__construct([$label]);
+            }
+        };
+
+        $this->expectException(CollectionException::class);
+        $this->expectExceptionMessage('if its constructor was redefined, override createSequence()');
+
+        $collection->slice(0);
+    }
+
+    #[Test]
+    public function derived_collections_work_when_the_redefined_constructor_can_take_the_elements(): void
+    {
+        $collection = new class ([1, 2, 3]) extends Collection {
+            public function __construct(iterable $elements = [], int ...$flags)
+            {
+                parent::__construct([...$elements]);
+            }
+        };
+
+        $sliced = $collection->slice(1);
+
+        $this->assertInstanceOf(get_class($collection), $sliced);
+        $this->assertSame([2, 3], $sliced->toArray());
+    }
+
+    #[Test]
+    public function the_error_raised_when_the_constructor_cannot_take_the_elements_is_kept_as_previous(): void
+    {
+        $collection = new class ('label') extends Collection {
+            public function __construct(string $label)
+            {
+                parent::__construct([$label]);
+            }
+        };
+
+        try {
+            $collection->slice(0);
+            $this->fail('A CollectionException was expected');
+        } catch (CollectionException $exception) {
+            $this->assertInstanceOf(TypeError::class, $exception->getPrevious());
+        }
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function usort_method_should_not_modify_the_original_collection(): void
+    {
+        $collection = new Collection([3, 1, 2]);
+
+        $sorted = $collection->usort(fn($a, $b) => $a <=> $b);
+
+        $this->assertSame([1, 2, 3], $sorted->toArray());
+        $this->assertSame([3, 1, 2], $collection->toArray());
     }
 }
