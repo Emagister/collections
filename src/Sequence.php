@@ -54,8 +54,9 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
         } catch (TypeError $error) {
             throw new CollectionException(
                 sprintf(
-                    'Could not create a new %s; if its constructor was redefined, override createSequence()',
-                    static::class
+                    'Could not create a new %s (%s); if its constructor was redefined, override createSequence()',
+                    static::class,
+                    $error->getMessage()
                 ),
                 previous: $error
             );
