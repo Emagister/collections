@@ -10,6 +10,7 @@ use IteratorAggregate;
 use JsonSerializable;
 use Traversable;
 use TypeError;
+use UnitEnum;
 
 /**
  * @template TKey
@@ -346,7 +347,11 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
     /** @throws CollectionException */
     final public function clone(): static
     {
-        $clonedElements = array_map(fn($element) => is_object($element) ? clone $element : $element, $this->elements);
+        // Enum cases are singletons and cannot be cloned
+        $clonedElements = array_map(
+            fn($element) => is_object($element) && !$element instanceof UnitEnum ? clone $element : $element,
+            $this->elements
+        );
 
         return $this->createSequence($clonedElements);
     }

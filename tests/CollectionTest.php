@@ -4,6 +4,7 @@ namespace Emagister\Collections\Tests;
 
 use Emagister\Collections\Collection;
 use Emagister\Collections\CollectionException;
+use Emagister\Collections\Tests\Fixtures\SampleEnum;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use stdClass;
@@ -291,6 +292,28 @@ class CollectionTest extends BaseTestCase
         }
 
         $this->assertEquals([1, 2, 3, 4, 5], $iteratedElements);
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function clone_method_should_keep_the_same_enum_cases(): void
+    {
+        $collection = new Collection([SampleEnum::First, SampleEnum::Second]);
+
+        $clonedCollection = $collection->clone();
+
+        $this->assertNotSame($collection, $clonedCollection);
+        $this->assertSame([SampleEnum::First, SampleEnum::Second], $clonedCollection->toArray());
+    }
+
+    #[Test]
+    public function cloning_a_collection_of_enum_cases_should_keep_the_same_enum_cases(): void
+    {
+        $collection = new Collection([SampleEnum::First, SampleEnum::Second]);
+
+        $clonedCollection = clone $collection;
+
+        $this->assertSame([SampleEnum::First, SampleEnum::Second], $clonedCollection->toArray());
     }
 
     #[Test]
