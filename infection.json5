@@ -14,5 +14,7 @@
     "mutators": {
         "@default": true
     },
-    "testFramework": "phpunit"
+    "testFramework": "phpunit",
+    "minMsi": 95,
+    "minCoveredMsi": 95
 }

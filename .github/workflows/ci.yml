@@ -74,3 +74,20 @@ jobs:
         run: composer install --no-interaction --prefer-dist
       - name: Run Infection
         run: composer run infection
+
+  infection-diff:
+    name: Mutation Testing on changed lines (Infection)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer:v2
+          coverage: pcov
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+      - name: Run Infection on changed lines
+        run: composer run infection:diff
