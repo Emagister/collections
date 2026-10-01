@@ -19,13 +19,17 @@ jobs:
         run: composer run lint
 
   tests:
-    name: PHPUnit Tests
+    name: PHPUnit Tests (PHP ${{ matrix.php-version }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.1', '8.2', '8.3', '8.4', '8.5']
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: ${{ matrix.php-version }}
           tools: composer:v2
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
@@ -91,3 +95,13 @@ jobs:
         run: composer install --no-interaction --prefer-dist
       - name: Run Infection on changed lines
         run: composer run infection:diff
+
+  ci-passed:
+    name: CI passed
+    if: always()
+    needs: [lint, tests, code-sniffer, cs-fixer, infection, infection-diff]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check that every job succeeded
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped')
+        run: exit 1
