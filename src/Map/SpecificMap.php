@@ -3,7 +3,8 @@
 namespace Emagister\Collections\Map;
 
 /**
- * Base class for typed maps whose constructor takes only the elements.
+ * Base class for typed maps whose constructor takes the elements as its first parameter,
+ * and no other required parameters.
  *
  * @template TValue
  *

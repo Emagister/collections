@@ -35,8 +35,9 @@ protected function createSequence(array $elements): static
 }
 ```
 
-If the constructor takes only the elements, you can drop the override instead and extend `SpecificCollection` or
-`SpecificMap`, which build new instances with `new static($elements)`.
+If the constructor takes the elements as its first parameter and has no other required parameters, you can drop the
+override instead and extend `SpecificCollection` or `SpecificMap`, which build new instances with
+`new static($elements)`.
 
 ### `Collection::usort()` no longer sorts the original collection
 

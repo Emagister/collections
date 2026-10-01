@@ -35,7 +35,8 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
     /**
      * Builds the sequence returned by derived-sequence methods such as `filter()` or `slice()`.
      *
-     * Subclasses redefining the constructor with a different signature must override this method.
+     * Subclasses whose constructor cannot be called the way this method calls it, because it has other required
+     * parameters or takes its arguments in a different order, must override this method.
      *
      * @throws CollectionException
      */

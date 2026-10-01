@@ -3,7 +3,8 @@
 namespace Emagister\Collections\Collection;
 
 /**
- * Base class for typed collections whose constructor takes only the elements.
+ * Base class for typed collections whose constructor takes the elements as its first parameter,
+ * and no other required parameters.
  *
  * @template TValue
  *
