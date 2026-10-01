@@ -6,6 +6,7 @@ use Emagister\Collections\CollectionException;
 use Emagister\Collections\Comparator;
 use Emagister\Collections\ComparatorBehavior;
 use Emagister\Collections\Map;
+use Emagister\Collections\Map\StringMap;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
@@ -251,5 +252,90 @@ class MapTest extends BaseTestCase
             $map1->equals($map2),
             'Collections with elements of different types should not be equal.'
         );
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function merge_method_should_return_a_map_with_the_elements_of_both_maps(): void
+    {
+        $map = new Map(['one' => 1, 'two' => 2]);
+        $otherMap = new Map(['two' => 22, 'three' => 3]);
+
+        $mergedMap = $map->merge($otherMap);
+
+        $this->assertSame(['one' => 1, 'two' => 22, 'three' => 3], $mergedMap->toArray());
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function merge_method_should_not_modify_the_original_maps(): void
+    {
+        $map = new Map(['one' => 1, 'two' => 2]);
+        $otherMap = new Map(['two' => 22, 'three' => 3]);
+
+        $mergedMap = $map->merge($otherMap);
+
+        $this->assertNotSame($map, $mergedMap);
+        $this->assertSame(['one' => 1, 'two' => 2], $map->toArray());
+        $this->assertSame(['two' => 22, 'three' => 3], $otherMap->toArray());
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function merge_method_should_keep_numeric_keys(): void
+    {
+        $map = new Map(['10' => 'a', '20' => 'b']);
+        $otherMap = new Map(['30' => 'c']);
+
+        $mergedMap = $map->merge($otherMap);
+
+        $this->assertSame([10 => 'a', 20 => 'b', 30 => 'c'], $mergedMap->toArray());
+        $this->assertSame(['10', '20', '30'], $mergedMap->keys());
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function merge_method_should_overwrite_duplicate_numeric_keys_with_the_values_of_the_other_map(): void
+    {
+        $map = new Map(['10' => 'a', '20' => 'b']);
+        $otherMap = new Map(['10' => 'z']);
+
+        $mergedMap = $map->merge($otherMap);
+
+        $this->assertSame([10 => 'z', 20 => 'b'], $mergedMap->toArray());
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function merge_method_should_keep_numeric_and_string_keys_together(): void
+    {
+        $map = new Map(['10' => 'a', 'x' => 'b']);
+        $otherMap = new Map(['20' => 'c', '10' => 'z', 'x' => 'y']);
+
+        $mergedMap = $map->merge($otherMap);
+
+        $this->assertSame([10 => 'z', 'x' => 'y', 20 => 'c'], $mergedMap->toArray());
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function merge_method_should_return_the_elements_of_the_other_map_when_merging_into_an_empty_map(): void
+    {
+        $map = new Map();
+        $otherMap = new Map(['10' => 'a', 'x' => 'b']);
+
+        $this->assertSame([10 => 'a', 'x' => 'b'], $map->merge($otherMap)->toArray());
+        $this->assertSame([10 => 'a', 'x' => 'b'], $otherMap->merge($map)->toArray());
+    }
+
+    #[Test]
+    public function merge_method_should_fail_with_a_map_of_another_class(): void
+    {
+        $map = new Map(['one' => 'a']);
+
+        $this->expectException(CollectionException::class);
+        $this->expectExceptionMessage('Sequences types are not compatible');
+
+        $map->merge(new StringMap(['two' => 'b']));
     }
 }

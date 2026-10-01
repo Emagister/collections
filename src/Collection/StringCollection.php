@@ -6,18 +6,13 @@ use Emagister\Collections\HomogeneityChecker;
 use Stringable;
 
 /**
- * @extends HCollection<string>
+ * @extends SpecificCollection<string>
  */
-final class StringCollection extends HCollection implements Stringable
+final class StringCollection extends SpecificCollection implements Stringable
 {
     public function __construct(array $elements = [])
     {
         parent::__construct(HomogeneityChecker::TYPE_STRING, $elements);
-    }
-
-    protected function createSequence(array $elements): StringCollection
-    {
-        return new StringCollection($elements);
     }
 
     public function __toString(): string

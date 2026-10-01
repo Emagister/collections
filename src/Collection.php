@@ -49,14 +49,4 @@ class Collection extends Sequence
             $callback($element);
         }
     }
-
-    final public function join(Collection $collection): Collection
-    {
-        return new Collection(
-            array_merge(
-                $this->elements,
-                $collection->toArray()
-            )
-        );
-    }
 }

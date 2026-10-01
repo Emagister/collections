@@ -49,15 +49,16 @@ class HMap extends Map
     }
 
     /**
+     * Subclasses redefining the constructor with a signature other than `(string $type, array $elements)`
+     * must override this method.
+     *
      * @param array<string, TValue> $elements
      *
      * @throws CollectionException
-     *
-     * @return HMap<TValue>
      */
-    protected function createSequence(array $elements): HMap
+    protected function createSequence(array $elements): static
     {
-        return new static($this->type, $elements);
+        return $this->newInstance($this->type, $elements);
     }
 
     /** @throws CollectionException */

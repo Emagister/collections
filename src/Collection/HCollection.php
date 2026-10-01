@@ -48,15 +48,16 @@ class HCollection extends Collection
     }
 
     /**
+     * Subclasses redefining the constructor with a signature other than `(string $type, array $elements)`
+     * must override this method.
+     *
      * @param array<int, TValue> $elements
      *
      * @throws CollectionException
-     *
-     * @return HCollection<TValue>
      */
-    protected function createSequence(array $elements): HCollection
+    protected function createSequence(array $elements): static
     {
-        return new static($this->type, $elements);
+        return $this->newInstance($this->type, $elements);
     }
 
     /** @throws CollectionException */

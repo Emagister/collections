@@ -75,7 +75,7 @@ class Map extends Sequence
         return $defaultValue;
     }
 
-    final public function getByKeys(string ...$keys): Map
+    final public function getByKeys(string ...$keys): static
     {
         return $this->filterKeys(
             function ($key) use ($keys) {
@@ -104,6 +104,7 @@ class Map extends Sequence
         return array_map(fn($key) => (string) $key, array_keys($this->elements));
     }
 
+    /** @throws CollectionException */
     public function sortWith(Comparator $comparator): static
     {
         $elements = $this->elements;
@@ -112,7 +113,20 @@ class Map extends Sequence
         return $this->createSequence($elements);
     }
 
-    final public function usort(callable $callback): Map
+    /**
+     * Keeps the keys of both maps, including numeric ones, and the values of the other map win for duplicate keys.
+     *
+     * @param array<string, TValue> $elements
+     * @param array<string, TValue> $otherElements
+     *
+     * @return array<string, TValue>
+     */
+    final protected function mergeElements(array $elements, array $otherElements): array
+    {
+        return array_replace($elements, $otherElements);
+    }
+
+    final public function usort(callable $callback): static
     {
         $elements = $this->elements;
 
@@ -121,7 +135,8 @@ class Map extends Sequence
         return $this->createSequence($elements);
     }
 
-    final public function filterKeys(Closure $closure): Map
+    /** @throws CollectionException */
+    final public function filterKeys(Closure $closure): static
     {
         return $this->filter(
             function ($_, $key) use ($closure) {
