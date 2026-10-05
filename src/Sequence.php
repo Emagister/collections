@@ -376,7 +376,7 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
         $groups = [];
 
         foreach ($this->elements as $key => $element) {
-            $groups[$discriminatorCallback($element)][$key] = $element;
+            $groups[(string) $discriminatorCallback($element)][$key] = $element;
         }
 
         $result = new HMap(static::class);

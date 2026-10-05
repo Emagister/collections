@@ -735,4 +735,17 @@ class CollectionTest extends BaseTestCase
 
         $this->assertSame([1, 2, 3], $merged->toArray());
     }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function group_by_should_convert_the_discriminators_to_strings(): void
+    {
+        $collection = new Collection([1.5, 1.7, 1.5]);
+
+        $groups = $collection->groupBy(fn(float $number) => $number);
+
+        $this->assertSame(['1.5', '1.7'], $groups->keys());
+        $this->assertSame([1.5, 1.5], $groups->get('1.5')->toArray());
+        $this->assertSame([1.7], $groups->get('1.7')->toArray());
+    }
 }
