@@ -381,4 +381,18 @@ class MapTest extends BaseTestCase
 
         $this->assertSame(['one' => 1, 'two' => 2], $visitedElements);
     }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function group_by_should_keep_the_keys_of_the_map_in_each_group(): void
+    {
+        $map = new StringMap(['apple' => 'fruit', 'carrot' => 'vegetable', 'banana' => 'fruit']);
+
+        $groups = $map->groupBy(fn(string $kind) => $kind);
+
+        $this->assertSame(['fruit', 'vegetable'], $groups->keys());
+        $this->assertInstanceOf(StringMap::class, $groups->get('fruit'));
+        $this->assertSame(['apple' => 'fruit', 'banana' => 'fruit'], $groups->get('fruit')->toArray());
+        $this->assertSame(['carrot' => 'vegetable'], $groups->get('vegetable')->toArray());
+    }
 }

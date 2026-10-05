@@ -373,18 +373,16 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
     /** @throws CollectionException */
     final public function groupBy(Closure $discriminatorCallback): HMap
     {
+        $groups = [];
+
+        foreach ($this->elements as $key => $element) {
+            $groups[(string) $discriminatorCallback($element)][$key] = $element;
+        }
+
         $result = new HMap(static::class);
 
-        foreach ($this->elements as $element) {
-            $discriminator = $discriminatorCallback($element);
-            $discriminatorResult = $result->get($discriminator);
-
-            if (is_null($discriminatorResult)) {
-                $discriminatorResult = $this->createSequence([]);
-                $result->add($discriminator, $discriminatorResult);
-            }
-
-            $discriminatorResult->add($element);
+        foreach ($groups as $discriminator => $groupElements) {
+            $result->add($discriminator, $this->createSequence($groupElements));
         }
 
         return $result;
