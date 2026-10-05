@@ -225,7 +225,7 @@ class MapTest extends BaseTestCase
 
         $sorted = $map->sortWith($comparator);
 
-        $this->assertEquals(['one' => 1, 'two' => 2, 'three' => 3], $sorted->toArray());
+        $this->assertSame(['one' => 1, 'two' => 2, 'three' => 3], $sorted->toArray());
     }
 
     /** @throws CollectionException */
