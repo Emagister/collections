@@ -6,3 +6,4 @@
 .claude/
 skills-lock.json
 /build/
+.DS_Store
