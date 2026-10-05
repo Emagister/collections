@@ -1,3 +1,15 @@
+## v2.0.3
+
+### [2.0.3](https://github.com/Emagister/collections/compare/v2.0.2...v2.0.3) (2026-10-05)
+
+
+### Bug Fixes
+
+* convert groupBy() discriminators to strings ([1dee0e2](https://github.com/Emagister/collections/commit/1dee0e2029c7ec63273cd45ca1d98d09939613f3))
+* keep keys when grouping maps with groupBy() ([aff2e2b](https://github.com/Emagister/collections/commit/aff2e2bc4bcabf569175f53e8748c157f5255d34))
+
+
+
 ## v2.0.2
 
 ### [2.0.2](https://github.com/Emagister/collections/compare/v2.0.1...v2.0.2) (2026-10-05)
