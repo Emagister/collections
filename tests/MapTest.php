@@ -320,6 +320,68 @@ class MapTest extends BaseTestCase
         $map->merge(new StringMap(['two' => 'b']));
     }
 
+    #[Test]
+    public function add_and_has_methods_should_work_with_the_keys_of_the_map(): void
+    {
+        $map = new Map();
+
+        $map->add('one', 1);
+
+        $this->assertTrue($map->has('one'));
+        $this->assertTrue($map->containsKey('one'));
+        $this->assertFalse($map->has('two'));
+        $this->assertSame(['one' => 1], $map->toArray());
+    }
+
+    #[Test]
+    public function prepend_method_should_add_the_element_at_the_beginning(): void
+    {
+        $map = new Map(['two' => 2, 'three' => 3]);
+
+        $map->prepend('one', 1);
+
+        $this->assertSame(['one' => 1, 'two' => 2, 'three' => 3], $map->toArray());
+    }
+
+    #[Test]
+    public function remove_key_method_should_remove_an_existing_key(): void
+    {
+        $map = new Map(['one' => 1, 'two' => 2]);
+
+        $this->assertTrue($map->removeKey('one'));
+        $this->assertSame(['two' => 2], $map->toArray());
+    }
+
+    #[Test]
+    public function remove_key_method_should_return_false_for_a_missing_key(): void
+    {
+        $map = new Map(['one' => 1]);
+
+        $this->assertFalse($map->removeKey('two'));
+        $this->assertSame(['one' => 1], $map->toArray());
+    }
+
+    #[Test]
+    public function get_by_keys_method_should_return_only_the_requested_keys(): void
+    {
+        $map = new Map(['one' => 1, 'two' => 2, 'three' => 3]);
+
+        $this->assertSame(['one' => 1, 'three' => 3], $map->getByKeys('one', 'three')->toArray());
+    }
+
+    #[Test]
+    public function each_method_should_call_the_callback_with_every_element_and_its_key(): void
+    {
+        $map = new Map(['one' => 1, 'two' => 2]);
+        $visitedElements = [];
+
+        $map->each(function ($element, $key) use (&$visitedElements): void {
+            $visitedElements[$key] = $element;
+        });
+
+        $this->assertSame(['one' => 1, 'two' => 2], $visitedElements);
+    }
+
     /** @throws CollectionException */
     #[Test]
     public function group_by_should_keep_the_keys_of_the_map_in_each_group(): void

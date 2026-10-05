@@ -27,7 +27,7 @@ class StringMap extends SpecificMap
                 iconv('UTF-8', 'ASCII//TRANSLIT', $b)
             );
 
-            return $comparison * ($order == self::ORDER_ASC ? 1 : -1);
+            return $order == self::ORDER_ASC ? $comparison : -$comparison;
         });
     }
 }
