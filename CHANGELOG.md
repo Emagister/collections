@@ -1,3 +1,9 @@
+## v2.0.2
+
+### [2.0.2](https://github.com/Emagister/collections/compare/v2.0.1...v2.0.2) (2026-10-05)
+
+
+
 ## v2.0.1
 
 ### [2.0.1](https://github.com/Emagister/collections/compare/v2.0.0...v2.0.1) (2026-10-05)
