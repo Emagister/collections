@@ -12,7 +12,12 @@
     },
     "tmpDir": "build/infection/tmp",
     "mutators": {
-        "@default": true
+        "@default": true,
+        "PublicVisibility": {
+            "ignore": [
+                "Emagister\\Collections\\ComparatorBehavior::reversed"
+            ]
+        }
     },
     "testFramework": "phpunit",
     "minMsi": 95,

@@ -130,6 +130,15 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
     }
 
     /** @throws CollectionException */
+    public function sortWith(Comparator $comparator): static
+    {
+        $elements = $this->elements;
+        usort($elements, [$comparator, 'compare']);
+
+        return $this->createSequence($elements);
+    }
+
+    /** @throws CollectionException */
     public function usort(callable $callback): static
     {
         $elements = $this->elements;

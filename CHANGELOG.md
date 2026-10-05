@@ -1,10 +1,7 @@
-## v2.0.2
+# Changelog
 
 ### [2.0.2](https://github.com/Emagister/collections/compare/v2.0.1...v2.0.2) (2026-10-05)
 
-
-
-## v2.0.1
 
 ### [2.0.1](https://github.com/Emagister/collections/compare/v2.0.0...v2.0.1) (2026-10-05)
 
@@ -19,9 +16,6 @@
 
 * raise the mutation score to 100% ([04a31b8](https://github.com/Emagister/collections/commit/04a31b8e062b2abb90be4af51704c9e10bf7bf52))
 
-
-
-## v2.0.0
 
 ## [2.0.0](https://github.com/Emagister/collections/compare/v1.5.1...v2.0.0) (2026-10-01)
 
@@ -69,10 +63,7 @@ method with that name must rename it. See UPGRADE.md.
 * clarify which constructor signatures work without overriding createSequence() ([134bf19](https://github.com/Emagister/collections/commit/134bf191309f86347ec8049839c9b988ebc5f02b))
 
 
-
-## v1.5.1
-
-### [1.5.1](https://github.com/Emagister/collections/compare/v1.5.0...v1.5.1) (2026-07-08)
+## [1.5.1](https://github.com/Emagister/collections/compare/v1.5.0...v1.5.1) (2026-07-08)
 
 
 ### Bug Fixes
@@ -90,9 +81,6 @@ method with that name must rename it. See UPGRADE.md.
 * extend remove() coverage for object value-equality and absent elements ([a0eb124](https://github.com/Emagister/collections/commit/a0eb1245e73d026520fdac92792b8c7edceba168))
 * rename remove() type-safety test to reflect strict-match behavior ([38ff022](https://github.com/Emagister/collections/commit/38ff022d95fe5afea1668980ba767aa39c9be41a))
 
-
-
-## v1.5.0
 
 ## [1.5.0](https://github.com/Emagister/collections/compare/v1.4.0...v1.5.0) (2026-07-08)
 
@@ -117,12 +105,6 @@ method with that name must rename it. See UPGRADE.md.
 * **ci:** let phpcs read paths from phpcs.xml.dist ([4c5f3a9](https://github.com/Emagister/collections/commit/4c5f3a98d80d092b93e249cc587a6a54b024a629))
 * **ci:** rename composer test script to tests ([b35c7a2](https://github.com/Emagister/collections/commit/b35c7a25964ccf4c26c7f5523bca459e5ba87df6))
 * **ci:** use composer scripts as single source of truth ([b043ef1](https://github.com/Emagister/collections/commit/b043ef1a4aac7311cef1e22b179dbac60a99309e))
-
-
-
-# Changelog
-
-## v1.4.0
 
 ## [1.4.0](https://github.com/Emagister/collections/compare/v1.3.2...v1.4.0) (2026-07-08)
 

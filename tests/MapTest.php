@@ -3,6 +3,8 @@
 namespace Emagister\Collections\Tests;
 
 use Emagister\Collections\CollectionException;
+use Emagister\Collections\Comparator;
+use Emagister\Collections\ComparatorBehavior;
 use Emagister\Collections\Map;
 use Emagister\Collections\Map\StringMap;
 use PHPUnit\Framework\Attributes\Test;
@@ -203,11 +205,31 @@ class MapTest extends BaseTestCase
         $this->assertEquals($integerIndexedMap->toArray(), $clonedIntegerIndexedMap->toArray());
     }
 
-    /**
-     * @test
-     *
-     * @throws CollectionException
-     */
+    #[Test]
+    public function sort_with_should_preserve_string_keys_after_sorting(): void
+    {
+        $comparator = new class () implements Comparator {
+            use ComparatorBehavior;
+
+            public function compare(mixed $a, mixed $b): int
+            {
+                return $a <=> $b;
+            }
+        };
+
+        $map = new Map([
+            'three' => 3,
+            'one' => 1,
+            'two' => 2,
+        ]);
+
+        $sorted = $map->sortWith($comparator);
+
+        $this->assertSame(['one' => 1, 'two' => 2, 'three' => 3], $sorted->toArray());
+    }
+
+    /** @throws CollectionException */
+    #[Test]
     public function equals_method_should_return_true_for_maps_with_same_elements_in_different_order(): void
     {
         $map1 = new Map(['1' => 1, '2' => 2]);
@@ -219,11 +241,8 @@ class MapTest extends BaseTestCase
         );
     }
 
-    /**
-     * @test
-     *
-     * @throws CollectionException
-     */
+    /** @throws CollectionException */
+    #[Test]
     public function equals_method_should_check_element_types(): void
     {
         $map1 = new Map(['1' => 1, '2' => 2]);

@@ -104,6 +104,15 @@ class Map extends Sequence
         return array_map(fn($key) => (string) $key, array_keys($this->elements));
     }
 
+    /** @throws CollectionException */
+    public function sortWith(Comparator $comparator): static
+    {
+        $elements = $this->elements;
+        uasort($elements, [$comparator, 'compare']);
+
+        return $this->createSequence($elements);
+    }
+
     /**
      * Keeps the keys of both maps, including numeric ones, and the values of the other map win for duplicate keys.
      *
