@@ -200,4 +200,33 @@ class HCollectionTest extends BaseTestCase
 
         $collection->merge($otherCollection);
     }
+
+    #[Test]
+    public function constructor_should_fail_with_elements_of_another_type(): void
+    {
+        $this->expectException(HomogeneityException::class);
+
+        new HCollection(HomogeneityChecker::TYPE_STRING, [1]);
+    }
+
+    #[Test]
+    public function diff_method_should_fail_with_a_collection_of_another_class(): void
+    {
+        $collection = new HCollection(HomogeneityChecker::TYPE_STRING, ['a']);
+
+        $this->expectException(CollectionException::class);
+        $this->expectExceptionMessage('Sequences types are not compatible');
+
+        $collection->diff(new StringCollection(['b']));
+    }
+
+    #[Test]
+    public function diff_method_should_fail_with_a_collection_of_another_type(): void
+    {
+        $collection = new HCollection(HomogeneityChecker::TYPE_STRING, ['a']);
+
+        $this->expectException(HomogeneityException::class);
+
+        $collection->diff(new HCollection(HomogeneityChecker::TYPE_NUMERIC, [1]));
+    }
 }

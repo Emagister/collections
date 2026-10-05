@@ -158,4 +158,44 @@ class HMapTest extends BaseTestCase
 
         $map->merge($otherMap);
     }
+
+    #[Test]
+    public function constructor_should_fail_with_elements_of_another_type(): void
+    {
+        $this->expectException(HomogeneityException::class);
+
+        new HMap(HomogeneityChecker::TYPE_STRING, ['one' => 1]);
+    }
+
+    #[Test]
+    public function diff_method_should_fail_with_a_map_of_another_class(): void
+    {
+        $map = new HMap(HomogeneityChecker::TYPE_STRING, ['a' => 'alpha']);
+
+        $this->expectException(CollectionException::class);
+        $this->expectExceptionMessage('Sequences types are not compatible');
+
+        $map->diff(new StringMap(['b' => 'beta']));
+    }
+
+    #[Test]
+    public function diff_method_should_fail_with_a_map_of_another_type(): void
+    {
+        $map = new HMap(HomogeneityChecker::TYPE_STRING, ['a' => 'alpha']);
+
+        $this->expectException(HomogeneityException::class);
+
+        $map->diff(new HMap(HomogeneityChecker::TYPE_NUMERIC, ['b' => 1]));
+    }
+
+    /** @throws CollectionException */
+    #[Test]
+    public function sort_alphabetically_should_sort_in_descending_order(): void
+    {
+        $map = new StringMap(['a' => 'alpha', 'c' => 'gamma', 'b' => 'beta']);
+
+        $sorted = $map->sortAlphabetically(StringMap::ORDER_DESC);
+
+        $this->assertSame(['c' => 'gamma', 'b' => 'beta', 'a' => 'alpha'], $sorted->toArray());
+    }
 }

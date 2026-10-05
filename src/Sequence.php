@@ -261,7 +261,7 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
             return null;
         }
 
-        return current(array_slice($this->elements, 0, 1));
+        return $this->elements[array_key_first($this->elements)];
     }
 
     /** @return TValue */
@@ -271,7 +271,7 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
             return null;
         }
 
-        return current(array_slice($this->elements, -1));
+        return $this->elements[array_key_last($this->elements)];
     }
 
     /** @throws CollectionException */

@@ -1,5 +1,22 @@
 # Changelog
 
+### [2.0.2](https://github.com/Emagister/collections/compare/v2.0.1...v2.0.2) (2026-10-05)
+
+
+### [2.0.1](https://github.com/Emagister/collections/compare/v2.0.0...v2.0.1) (2026-10-05)
+
+
+### Continuous Integration
+
+* enforce minimum mutation scores ([ccff0be](https://github.com/Emagister/collections/commit/ccff0bea97c2f29adae35bdd2a5b587d71d1a42f))
+* test on PHP 8.1 to 8.5 and add a CI passed check ([283d451](https://github.com/Emagister/collections/commit/283d4519de876b01cadb0463943c40132368111d))
+
+
+### Tests
+
+* raise the mutation score to 100% ([04a31b8](https://github.com/Emagister/collections/commit/04a31b8e062b2abb90be4af51704c9e10bf7bf52))
+
+
 ## [2.0.0](https://github.com/Emagister/collections/compare/v1.5.1...v2.0.0) (2026-10-01)
 
 
