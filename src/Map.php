@@ -66,7 +66,7 @@ class Map extends Sequence
         return $this->has($key);
     }
 
-    final public function get(string $key, $defaultValue = null)
+    final public function get(string $key, $defaultValue = null): mixed
     {
         if ($this->has($key) && !is_null($this->elements[$key])) {
             return $this->elements[$key];
