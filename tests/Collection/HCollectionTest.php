@@ -229,4 +229,14 @@ class HCollectionTest extends BaseTestCase
 
         $collection->diff(new HCollection(HomogeneityChecker::TYPE_NUMERIC, [1]));
     }
+
+    #[Test]
+    public function add_method_should_append_an_element_of_the_collection_type(): void
+    {
+        $collection = new HCollection(HomogeneityChecker::TYPE_NUMERIC, [1]);
+
+        $collection->add(2);
+
+        $this->assertSame([1, 2], $collection->toArray());
+    }
 }

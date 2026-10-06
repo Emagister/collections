@@ -290,13 +290,15 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
      *
      * @return TValue|null
      */
-    final public function find(Closure $callback)
+    final public function find(Closure $callback): mixed
     {
         foreach ($this->elements as $element) {
             if ($callback($element)) {
                 return $element;
             }
         }
+
+        return null;
     }
 
     /**
@@ -304,13 +306,15 @@ abstract class Sequence implements JsonSerializable, IteratorAggregate, Countabl
      *
      * @return TValue|null
      */
-    final public function findNot(Closure $callback)
+    final public function findNot(Closure $callback): mixed
     {
         foreach ($this->elements as $element) {
             if (!$callback($element)) {
                 return $element;
             }
         }
+
+        return null;
     }
 
     /** Modifies the current sequence removing the elements satisfying the callback. */

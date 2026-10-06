@@ -395,4 +395,12 @@ class MapTest extends BaseTestCase
         $this->assertSame(['apple' => 'fruit', 'banana' => 'fruit'], $groups->get('fruit')->toArray());
         $this->assertSame(['carrot' => 'vegetable'], $groups->get('vegetable')->toArray());
     }
+
+    #[Test]
+    public function get_should_return_the_default_value_when_the_stored_value_is_null(): void
+    {
+        $map = new Map(['a' => null]);
+
+        $this->assertSame('default', $map->get('a', 'default'));
+    }
 }
