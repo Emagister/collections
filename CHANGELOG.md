@@ -1,3 +1,19 @@
+## v2.0.4
+
+### [2.0.4](https://github.com/Emagister/collections/compare/v2.0.3...v2.0.4) (2026-10-06)
+
+
+### Bug Fixes
+
+* add missing mixed return types to find(), findNot() and Map::get() ([e401bf1](https://github.com/Emagister/collections/commit/e401bf11dab033ae69d8b38ccd6137b5ea6ba9b5))
+
+
+### Tests
+
+* cover Map::get() with null values and HCollection::add() ([0131c13](https://github.com/Emagister/collections/commit/0131c1301c6c119d335ad2910d63b61af2a6e988))
+
+
+
 ## v2.0.3
 
 ### [2.0.3](https://github.com/Emagister/collections/compare/v2.0.2...v2.0.3) (2026-10-05)

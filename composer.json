@@ -39,5 +39,5 @@
         "infection": "infection --threads=max",
         "infection:diff": "infection --threads=max --git-diff-lines --git-diff-base=origin/main --min-msi=100 --min-covered-msi=100 --ignore-msi-with-no-mutations"
     },
-    "version": "2.0.3"
+    "version": "2.0.4"
 }
